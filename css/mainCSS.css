@@ -1,0 +1,51 @@
+body {
+	width: 100%;
+	min-width: 100%;
+	overflow-x: hidden;
+}
+
+/*FONTS*/
+@font-face {
+	font-family: lemonFont;
+	src: url('fonts/LemonMilk.otf');
+}
+
+@font-face {
+	font-family: bebasFont;
+	src: url('fonts/BebasNeue.otf');
+	font-weight: lighter;
+}
+
+@font-face {
+	font-family: optimusFont;
+	src: url('fonts/OptimusPrinceps.ttf');
+}
+
+@font-face {
+	font-family: robotoFont;
+	src: url('fonts/Roboto.ttf');
+}
+
+/*MAIN MENU STYLE*/
+.main_menu {
+	background-color: #B43434;
+	height: 100%;
+	min-height: 100%;
+	position: absolute;
+	text-align: center;
+	font-family: robotoFont;
+	font-size: 15px;
+	letter-spacing: 1px;
+}
+
+.main_menu a{
+	color: white;
+}
+.main_menu a.active {
+	background-color: #4CAF50;
+	color: white;
+}
+
+.main_menu a:hover {
+	background-color: #e84c4c;
+}
