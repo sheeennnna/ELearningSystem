@@ -1,0 +1,66 @@
+div.recents {
+	margin-left: 10px;
+	padding-top: 15px;
+}
+
+p.recent_messages_header{
+	font-family: robotoFont;
+	font-weight: bolder;
+	font-size: 20px;
+}
+
+hr.recent_messages_hr { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+} 
+
+div.compose_message {
+	text-align: right;
+	font-size: 25px;
+}
+
+p.sender_name {
+	margin-top: 15px;
+	font-family: bebasFont;
+	letter-spacing: 1px;
+}
+
+p.message_preview {
+	margin-top: -10px;
+	font-family: robotoFont;
+	font-weight: bold;
+}
+
+a.message_prev {
+	color: black;
+}
+
+div.message_avatar {
+	text-align: right;
+}
+
+div.open_message {
+	background-color: #eff0f2;
+}
+
+div.message_thumb {
+	padding-bottom: 10px;
+}
+
+div.receiver_reply {
+	background-color: #eff0f2;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
+div.inbox_panel {
+	margin-top: 5px;
+}
+img.student_icon{
+	height: 65px;
+}

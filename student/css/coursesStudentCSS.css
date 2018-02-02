@@ -1,0 +1,57 @@
+/** SIDE MENU STYLE **/
+.course_side_menu {
+	padding-left: 25px;
+}
+
+/** BODY ELEMENTS STYLE **/
+.hr_line_header { 
+    display: block;
+    margin-top: -.5em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    width: 108%;
+    text-align: left;
+}
+
+.hr_line_feedback { 
+    display: block;
+    margin-top: .7em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    width: 95%;
+}
+
+h3.course_header {
+	margin-top: 10px;
+	font-family: optimusFont;
+	font-size: 30px;
+	font-weight: bolder;
+}
+
+p.recent_activity {
+	font-family: robotoFont;
+	font-size: 50px;
+	letter-spacing: 1px;
+}
+
+h3.announcement_title {
+	font-family: bebasFont;
+	margin-left: -20px;
+}
+
+p.announcement_maker {
+	margin-top: -10px;
+	margin-left: -20px;
+	font-family: robotoFont;
+	font-weight: bolder;
+}
+
+p.announcement_body {
+	margin-left: -20px;
+}

@@ -1,0 +1,165 @@
+<html>
+<head>
+	<link rel='stylesheet' href="css/dashboardCSSTeacher.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked">
+				<li><a href="">
+					<span class='glyphicon glyphicon-user'></span>
+					</br>Account
+				</a></li>
+				<li><a href="dashboardTeacher.php" class='active'>
+					<span class='glyphicon glyphicon-th'></span>
+					</br>Dashboard
+					</a>
+				</li>
+				<li><a href="">
+					<span class='glyphicon glyphicon-book'></span>
+					<br>Handled Courses</br>
+				</a></li>
+				<li><a href="">
+					<span class='glyphicon glyphicon-inbox'></span>
+					<br>Inbox</br>
+				</a></li>
+				<li><a href="">
+					<span class='glyphicon glyphicon-question-sign'></span>
+					<br>Help</br>
+				</a></li>
+				<br><br><br>
+				<li><a href="">
+					<span class='glyphicon glyphicon-log-out'></span>
+				</a></li>
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>Dashboard</h3>
+					<center><hr class="hr_line"></center>
+					<div class='row' style='margin:20px'>
+						<!-- Single button -->
+						<div class="btn-group" style='margin-bottom:20px;'>
+						  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+						    <span class='glyphicon glyphicon-cog'></span> Options <span class="caret"></span>
+						  </button>
+						  <ul class="dropdown-menu">
+						    <li><a href="#"><span class='glyphicon glyphicon-send'></span> Message All</a></li>
+						    <li><a href="#"><span class='glyphicon glyphicon-print'></span> Print List</a></li>
+						  </ul>
+						</div>
+						<table class="table table-bordered">
+						  <thead>
+						    <tr>
+						      <th class='col-md-3 text-center'>Name</th>
+						      <th class='col-md-2 text-center'>ID Number</th>
+						      <th class='col-md-2 text-center'>Year Level</th>
+						      <th class='col-md-2 text-center'>Last Login</th>
+						      <th class='col-md-1 text-center'><span class='glyphicon glyphicon-ok'></span></th>
+						  	  <th class='col-md-1'></th>
+						    </tr>
+						  </thead>
+						  <tbody>
+						    <tr>
+						      <th class='text-center'>
+						      	<img class='dashboard_view_student' src='../images/person_icon.png' style='height:50px; width:50px; margin-right:10px'>
+						      	<a href='dashboardTeacherViewStudentSingle.php'>Marian Isabel Mozo</a>
+						      </th>
+						      <td class='text-center'>15100321</td>
+						      <td class='text-center'>6th Grade</td>
+						      <td class='text-center'>December 24, 2017</td>
+						      <td class='text-center'>A+</td>
+						      <td class='text-center'>
+						      	<!-- Single button -->
+								<div class="btn-group">
+								  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <span class='glyphicon glyphicon-cog'></span> <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu">
+								    <li><a href="#"><span class='glyphicon glyphicon-erase'></span> Drop Student</a></li>
+								  </ul>
+								</div>
+						      </td>
+						    </tr>
+						    <tr>
+						      <th class='text-center'>
+						      	<img class='dashboard_view_student' src='../images/person_icon.png' style='height:50px; width:50px; margin-right:10px'>
+						      	<a href='dashboardTeacherViewStudentSingle.php'>June Jan Genelsa</a>
+						      </th>
+						      <td class='text-center'>15100322</td>
+						      <td class='text-center'>6th Grade</td>
+						      <td class='text-center'>December 27, 2017</td>
+						      <td class='text-center'>B-</td>
+						      <td class='text-center'>
+						      	<!-- Single button -->
+								<div class="btn-group">
+								  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <span class='glyphicon glyphicon-cog'></span> <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu">
+								    <li><a href="#"><span class='glyphicon glyphicon-erase'></span> Drop Student</a></li>
+								  </ul>
+								</div>
+						      </td>
+						    </tr>
+						    <tr>
+						      <th class='text-center'>
+						      	<img class='dashboard_view_student' src='../images/person_icon.png' style='height:50px; width:50px; margin-right:10px'>
+						      	<a href='dashboardTeacherViewStudentSingle.php'>Sheena Alcantara</a>
+						      </th>
+						      <td class='text-center'>15100323</td>
+						      <td class='text-center'>6th Grade</td>
+						      <td class='text-center'>January 4, 2018</td>
+						      <td class='text-center'>C+</td>
+						      <td class='text-center'>
+						      	<!-- Single button -->
+								<div class="btn-group">
+								  <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+								    <span class='glyphicon glyphicon-cog'></span> <span class="caret"></span>
+								  </button>
+								  <ul class="dropdown-menu">
+								    <li><a href="#"><span class='glyphicon glyphicon-erase'></span> Drop Student</a></li>
+								  </ul>
+								</div>
+						      </td>
+						    </tr>
+						  </tbody>
+						</table>
+						<p class='text-center'> WebProf &copy 2018</p>
+					</div>
+				</div>
+				<div>
+				</div>
+				<div class='col col-md-2 enrol_btn'> 
+					<button type="button" class='btn btn-primary btn-md enrol_subj'> 
+						Enroll to Subject
+					</button>
+					<a href="dashboardTeacherViewSchedule.php">
+						<button type="button" class='btn btn-warning btn-md view_sched'>
+							View Schedule
+						</button>
+					</a>
+					<a href="dashboardTeacherViewStudents.php">
+						<button type="button" class='btn btn-info btn-md view_stud'>
+							View Students
+						</button>
+					</a>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</body>
+
+</html>

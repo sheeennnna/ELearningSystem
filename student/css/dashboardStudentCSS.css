@@ -1,0 +1,21 @@
+/*BODY SECTION*/
+.body_section h3 {
+	font-family: optimusFont;
+	font-size: 35px;
+}
+
+.enrol_btn {
+	padding-top: 22px;
+}
+
+.body_section p.break_line {
+	margin-top: -20px;
+}
+
+.body_section .view_sched{
+	margin-top: 10px;
+}
+
+a.enrol_subj, a.view_sched{
+	width: 9em;
+}

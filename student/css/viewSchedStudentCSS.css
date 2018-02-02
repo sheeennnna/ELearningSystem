@@ -1,0 +1,11 @@
+div.sched_div {
+	padding-top: 25px;
+}
+
+p.sched_header {
+	font-size: 18px;
+}
+
+button.print_sched_btn {
+	margin-top: -3px;
+}
