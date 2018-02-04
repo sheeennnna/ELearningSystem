@@ -61,7 +61,7 @@
 			</div>
 			<div class='col col-md-1 text-center main_menu_teacher'>
 				<ul class='nav nav-pills nav-stacked'>
-						<li role='presentation' class='active'>
+						<li role='presentation'>
 							<a href="coursesStudent.php"> Home </a>
 						</li>
 						<li role='presentation'>
@@ -74,12 +74,9 @@
 							<a href="courseStudentGrades.php"> Grades </a>
 						</li>
 						<li role='presentation'>
-							<a href="filesStudent.php"> Files </a>
-						</li>
-						<li role='presentation'>
 							<a href="coursesStudent.php"> Syllabus </a>
 						</li>
-						<li role='presentation'>
+						<li role='presentation' class='active'>
 							<a href="courseStudentSession.php"> Session </a>
 						</li>
 					</ul>
@@ -196,7 +193,7 @@
 							<button class="btn btn-default" type="button">View Details</button>
 						</a>
 					</span>
-				</cnter>
+				</center>
 			</div>
 		</div>
 	</div>
