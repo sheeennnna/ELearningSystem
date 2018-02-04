@@ -130,7 +130,7 @@
 				</div>
 
 				<div class='col col-md-8'>
-					<div class='panel panel-primary inbox_panel'>
+					<div class='panel panel-danger inbox_panel'>
 						<div class='panel-heading'> Kent Michael Talisaysay</div>
 						<div class='panel-body'>
 							<div class='row sender_message'>
@@ -175,7 +175,7 @@
 									<div class='input-group'>
 										<input type='text' class='form-control' placeholder='Type your reply'>
 										<span class='input-group-btn'>
-											<button class='btn btn-success' type='button'> Send </button>
+											<button class='btn btn-danger' type='button'> Send </button>
 										</span>
 									</div>
 								</div>
@@ -213,7 +213,7 @@
 		    		<div class='row'>
 		    			<div class='col col-md-10'></div>
 		    			<div class='col col-md-2'>
-		    				<button type='button' class='btn btn-success'>Send!</button>
+		    				<button type='button' class='btn pull-right btn-danger'>Send!</button>
 		    			</div>
 		    		</div>
 		    	</div>
