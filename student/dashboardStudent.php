@@ -53,9 +53,9 @@
 					</p> 
 				</div>
 				<div class='col col-md-2 enrol_btn'> 
-					<a href="enrollPage.php" role="button" class='btn btn-primary'> Enroll to Subject</a>
+					<a href="enrollPage.php" role="button" class='btn btn-default'> Enroll to Subject</a>
 					</br>
-					<a href="viewSchedStudent.php" role='button'  class='btn btn-warning btn-md view_sched'>
+					<a href="viewSchedStudent.php" role='button'  class='btn btn-danger btn-md view_sched'>
 						View Schedule
 					</a>
 						
@@ -70,7 +70,7 @@
 					        <h4>ENGLISH 1</h4>
 					        <p>Time Schedule: 8:00AM - 9:00AM</p>
 					        <p>
-					        	<a href="coursesStudent.php" class="btn btn-primary" role="button">Open Course</a> 
+					        	<a href="coursesStudent.php" class="btn btn-default" role="button">Open Course</a> 
 					        	<a href="#" class="btn btn-danger" role="button">
 					        		<span class='glyphicon glyphicon-trash'></span> Leave
 					        	</a>
@@ -85,7 +85,7 @@
 					      <div class="caption">
 					        <h5 class='text-center'> Interested in another course? Enroll now!</h5>
 					        <p class='text-center'>
-					        	<a href="enrollPage.php" class="btn btn-primary" role="button">Enroll Here</a>
+					        	<a href="enrollPage.php" class="btn btn-danger" role="button">Enroll Here</a>
 					        </p>
 					      </div>
 					    </div>
