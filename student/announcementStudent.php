@@ -25,7 +25,7 @@
 					<span class='glyphicon glyphicon-th'></span>
 					</br>Dashboard
 				</a></li>
-				<li><a href="coursesStudent.php" class='active'>
+				<li><a href="courseStudentGrades.php" class='active'>
 					<span class='glyphicon glyphicon-book'></span>
 					<br>Courses</br>
 				</a></li>
@@ -51,7 +51,7 @@
 					<h3 class='course_header'><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> ENGLISH 1</h3>
 				</div>
 				<div class='col col-md-11'> 
-					<center><hr class="hr_line"></center>
+					<center><hr class="hr_line_header"></center>
 				</div>
 			</div>
 
@@ -66,13 +66,10 @@
 							<a href="announcementStudent.php"> Announcements </a>
 						</li>
 						<li role='presentation'>
-							<a href="coursesStudent.php"> Assignment </a>
+							<a href="assignmentStudent.php"> Assignment </a>
 						</li>
 						<li role='presentation'>
-							<a href="gradesStudent.php"> Grades </a>
-						</li>
-						<li role='presentation'>
-							<a href="filesStudent.php"> Files </a>
+							<a href="courseStudentGrades.php"> Grades </a>
 						</li>
 						<li role='presentation'>
 							<a href="coursesStudent.php"> Syllabus </a>
@@ -85,7 +82,7 @@
 				<!-- END OF SIDE MENU -->
 				<!-- BODY -->
 				<div class='col col-md-9'>
-					<div class="panel panel-info">
+					<div class="panel panel-danger">
 						<div class='panel-heading announcement_header'> 
 							<span class='glyphicon glyphicon-bullhorn'></span> Announcement 
 						</div>
@@ -108,7 +105,7 @@
 									<div class='input-group'>
 										<input type='text' class='form-control' placeholder='Type your reply'>
 										<span class='input-group-btn'>
-											<button class='btn btn-success' type='button'> Send </button>
+											<button class='btn btn-danger' type='button'> Send </button>
 										</span>
 									</div>
 								</div>
