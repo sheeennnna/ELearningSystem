@@ -1,0 +1,34 @@
+/*SIDE MENU ELEMENTS*/
+.student_sideMenu {
+	text-align: left;
+	margin-left: -19px;
+}
+
+/*BODY ELEMENTS*/
+.hr_line_header { 
+    display: block;
+    margin-top: -.5em;
+    margin-bottom: 1em;
+    margin-left: 0;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+    width: 108%;
+    text-align: left;
+}
+
+h3.course_header {
+	margin-top: 10px;
+	font-family: optimusFont;
+	font-size: 30px;
+	font-weight: bolder;
+}
+
+.assignment_name {
+	color: #9b0101;
+}
+
+.assignment_title, .assignment_sub, .specs {
+	color: #9b0101;
+}
+
