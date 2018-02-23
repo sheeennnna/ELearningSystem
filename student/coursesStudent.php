@@ -1,7 +1,9 @@
 <html>
 <head>
-	<link rel='stylesheet' href="css/coursesStudentCSS.css">
 	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/accountStudentCSS.css">
+	<link rel='stylesheet' href="css/coursesStudentCSS.css">
 	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
 	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
 	<script src="../bootstrap/js/jquery.min.js"></script>
@@ -56,7 +58,7 @@
 			<div class='row'>
 				<!-- SIDE MENU -->
 				<div class='col col-md-2 course_side_menu'>
-					<ul class='nav nav-pills nav-stacked course_navSide'>
+					<ul class='nav nav-pills nav-stacked'>
 						<li role='presentation' class='active'>
 							<a href="coursesStudent.php"> Home </a>
 						</li>
@@ -64,10 +66,13 @@
 							<a href="announcementStudent.php"> Announcements </a>
 						</li>
 						<li role='presentation'>
-							<a href="assignmentStudent.php"> Assignment </a>
+							<a href="coursesStudent.php"> Assignment </a>
 						</li>
 						<li role='presentation'>
 							<a href="courseStudentGrades.php"> Grades </a>
+						</li>
+						<li role='presentation'>
+							<a href="filesStudent.php"> Files </a>
 						</li>
 						<li role='presentation'>
 							<a href="coursesStudent.php"> Syllabus </a>

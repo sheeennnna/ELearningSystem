@@ -90,9 +90,9 @@
 			  <div class="panel-body">
 			  		<div class="col-md-11">
 			  			<div class="input-group">
-					  		<span class="input-group-btn">
-						        <button class="btn btn-default" type="button">Title</button>
-						      </span>
+					  		<span class="input-group-addon">
+							        <b>Title</b>
+							      </span>
 						      <input type="text" class="form-control" placeholder="">
 			    		</div>
 

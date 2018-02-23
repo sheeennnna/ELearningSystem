@@ -89,27 +89,26 @@
 			  </div>
 			  <div class="panel-body">
 			  		<div class="col-md-11">
-			  			<div class="input-group">
-					  		<span class="input-group-addon">
-						        <b>Title</b>
-						      </span>
-						      <input type="text" class="form-control" placeholder="">
-			    		</div>
+				  			<div class="input-group">
+						  		<span class="input-group-addon">
+							        <b>Title</b>
+							      </span>
+							      <input type="text" class="form-control" placeholder="">
+				    		</div>
 			    		<br>
-			    		<div class="input-group">
+			    		<!-- <div class="input-group">
 					  		<span class="input-group-addon">
 						        <b>Subtitle</b>
 						      </span>
 						      <input type="text" class="form-control" placeholder="">
-			    		</div>
-			    		<br>
+			    		</div> -->
 			    		<div class="row">
 			    			<div class="col-md-6">
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
 						        		<b>Submission Type</b>
 						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
+						      		<input type="text" class="form-control" placeholder="On Paper">
 			    				</div>
 			    			</div>
 			    			<div class="col-md-6">

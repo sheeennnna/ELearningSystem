@@ -1,9 +1,18 @@
-table.score_list {
-	width: 115%;
-	margin-right:25px; 
-	margin-left: 10px;
+#tabl{
+
+	margin-left:50px;
+	width:90%;
+
 }
 
-div.score_table {
-	padding-right: 25px;
+.td1{
+
+	color:#2563f4;
+
 }
+
+#arr_btn{
+	margin-left: -120px;
+}
+
+

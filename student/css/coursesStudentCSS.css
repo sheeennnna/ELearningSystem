@@ -3,30 +3,6 @@
 	padding-left: 25px;
 }
 
-.course_navSide {
-    background-color: #B43434;
-    height: 100%;
-    min-height: 100%;
-    position: fixed;
-    text-align: center;
-    font-family: robotoFont;
-    font-size: 15px;
-    letter-spacing: 1px;
-}
-
-.course_navSide a{
-    color: white;
-}
-.course_navSide a.active {
-    background-color: #4CAF50;
-    color: white;
-}
-
-.course_navSide a:hover {
-    background-color: #e84c4c;
-}
-
-
 /** BODY ELEMENTS STYLE **/
 .hr_line_header { 
     display: block;
@@ -78,8 +54,4 @@ p.announcement_maker {
 
 p.announcement_body {
 	margin-left: -20px;
-}
-
-.recent_activity_nav {
-    color: #ff3838;
 }

@@ -66,7 +66,7 @@
 					        <p><b>Time Schedule:</b><br>8:00AM - 9:00AM</p>
 					        <p><b>Subject: </b> <br>Transfiguration</p>
 					        <p class='text-right'>
-					        	<a id="trigger_modal" class="btn btn-danger" role="button">Enroll</a> 
+					        	<a id="trigger_modal" class="btn btn-success" role="button">Enroll</a> 
 					        </p>
 					      </div>
 					    </div>
@@ -82,7 +82,7 @@
 					        <p><b>Time Schedule:</b><br>9:00AM - 10:00AM</p>
 					        <p><b>Subject: </b> Defence <br>Against the Dark Arts</p>
 					        <p class='text-right'>
-					        	<a id="trigger_modal" class="btn btn-danger" role="button">Enroll</a> 
+					        	<a id="trigger_modal" class="btn btn-success" role="button">Enroll</a> 
 					        </p>
 					      </div>
 					    </div>
@@ -98,7 +98,7 @@
 					        <p><b>Time Schedule:</b><br>1:00PM - 2:00PM</p>
 					        <p><b>Subject: </b><br>Transifugration</p>
 					        <p class='text-right'>
-					        	<a id="trigger_modal" class="btn btn-danger" role="button">Enroll</a> 
+					        	<a id="trigger_modal" class="btn btn-success" role="button">Enroll</a> 
 					        </p>
 					      </div>
 					    </div>
@@ -114,7 +114,7 @@
 					        <p><b>Time Schedule:</b><br>2:00PM - 3:00PM</p>
 					        <p><b>Subject: </b><br>Potions</p>
 					        <p class='text-right'>
-					        	<a id="trigger_modal" class="btn btn-danger" role="button">Enroll</a> 
+					        	<a id="trigger_modal" class="btn btn-success" role="button">Enroll</a> 
 					        </p>
 					      </div>
 					    </div>

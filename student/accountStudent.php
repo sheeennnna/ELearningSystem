@@ -28,7 +28,7 @@
 					<span class='glyphicon glyphicon-book'></span>
 					<br>Courses</br>
 				</a></li>
-				<li><a href="inboxStudent.php">
+				<li><a href="inoxStudent.php">
 					<span class='glyphicon glyphicon-inbox'></span>
 					<br>Inbox</br>
 				</a></li>
@@ -71,7 +71,7 @@
 				<div class='col col-md-7'>
 					<p class='info_name'> Marian Isabel Mozo </p>
 					
-					<div class="panel panel-danger info_panel">
+					<div class="panel panel-default info_panel">
 					  <div class="panel-heading">
 					  	<p class='title_name'>Contact Details</p>
 					  </div>
@@ -88,7 +88,7 @@
 					  </div>
 					</div>
 					
-					<div class="panel panel-danger info_panel">
+					<div class="panel panel-default info_panel">
 					  <div class="panel-heading">
 					  	<p class='title_name'>Biography Details</p>
 					  </div>

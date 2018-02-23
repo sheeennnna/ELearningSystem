@@ -89,6 +89,7 @@
 			  </div>
 			  <div class="panel-body">
 			  		<div class="col-md-11">
+			  			<h4>Details</h4><hr>
 			  			<div class="input-group">
 					  		<span class="input-group-addon">
 						        <b>Title</b>
@@ -96,43 +97,31 @@
 						      <input type="text" class="form-control" placeholder="">
 			    		</div>
 			    		<br>
-			    		<div class="input-group">
-					  		<span class="input-group-addon">
-						        <b>Subtitle</b>
-						      </span>
-						      <input type="text" class="form-control" placeholder="">
-			    		</div>
+			    		<b>Quiz Instructions</b>
+			    		<textarea class="form-control"></textarea>
 			    		<br>
 			    		<div class="row">
 			    			<div class="col-md-6">
 			    				<div class="input-group">
-					  				<span class="input-group-addon">
-						        		<b>Submission Type</b>
-						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
+						  			<span class="input-group-addon">
+							        	<b>Time Limit</b>
+							     	</span>
+						      		<input type="text" class="form-control" placeholder="Minutes">
 			    				</div>
 			    			</div>
-			    			<div class="col-md-6">
-			    				<div class="input-group">
-					  				<span class="input-group-addon">
-						        		<b>Points</b>
-						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
-			    				</div>
-			    			</div>
+				    		<div class="form-group">
+	                			<div class='input-group date' id='datetimepicker1'>
+	                				<span class="input-group-addon">
+	                					<b>Due Date</b>
+	                    			</span>
+	                   				<input type='text' class="form-control" />
+	                   				<span class="input-group-addon">
+	                        			<span class="glyphicon glyphicon-calendar"></span>
+	                    			</span>
+	               			 	</div>
+	               			 	<br>
+	           				</div>
 			    		</div>
-			    		<br>
-			    		<div class="form-group">
-                			<div class='input-group date' id='datetimepicker1'>
-                				<span class="input-group-addon">
-                					<b>Due Date</b>
-                    			</span>
-                   				<input type='text' class="form-control" />
-                   				<span class="input-group-addon">
-                        			<span class="glyphicon glyphicon-calendar"></span>
-                    			</span>
-               			 	</div>
-           				</div>
            				<!-- <script type="text/javascript">
    							$(function () {
          						$('#datetimepicker1').datetimepicker();
@@ -142,11 +131,20 @@
 						-->
 
 			    		<!--*Insert here kadtong textarea with the formating options nga very laysho but for now text area lang sa:*</p>-->
+
+			    		<h4>Questions</h4><hr>
 			    		<div class="form-group">
-    						<p> *insert how to create quiz refer to canvas* </p>
+    						<!-- <label for="exampleFormControlTextarea1">Content</label> -->
+	    					<!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"> -->
+	    						<ol type='1'>
+									<li><input type='text' class="form-control" value=""/></li>
+									<li><input type='text' class="form-control" value=""/></li>
+									<li><input type='text' class="form-control" value=""/> </li>
+								</ol>
+	    					<!-- </textarea> -->
   						</div>
 
-			    		<div class="col-md-offset-9">
+  						<div class="col-md-offset-9">
 			    			<div class="col-md-6">
 			    				<button type="button" class="btn btn-primary"><span class='glyphicon glyphicon-ok'></span> Create</button>
 			    			</div>
