@@ -1,0 +1,63 @@
+/*FONTS*/
+@font-face {
+	font-family: lemonFont;
+	src: url('fonts/LemonMilk.otf');
+}
+
+@font-face {
+	font-family: bebasFont;
+	src: url('fonts/BebasNeue.otf');
+	font-weight: lighter;
+}
+
+@font-face {
+	font-family: optimusFont;
+	src: url('fonts/OptimusPrinceps.ttf');
+}
+
+@font-face {
+	font-family: robotoFont;
+	src: url('fonts/Roboto.ttf');
+}
+
+/*BODY SECTION*/
+.body_section .add_announcement {
+	font-family: robotoFont;
+	font-size: 20px;
+}
+
+.body_section .announcement_icon{
+	width:80px;
+	height:80px;
+}
+
+.body_section .announcement_header{
+	font-family: robotoFont;
+	font-size:30px;
+	font-weight: bold;
+	color:#4f93ff;
+}
+
+.body_section .announcer{
+}
+
+.body_section .announcement_message{
+	
+}
+
+.body_section .announcement_header_single{
+	font-family: robotoFont;
+	font-size:30px;
+	font-weight: bold;
+	color:#4f93ff;
+}
+
+.hr_line { 
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
+}

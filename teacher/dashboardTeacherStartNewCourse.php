@@ -66,30 +66,33 @@
 			</div>
 
 				<div class="row">
-					<div class="col col-sm-3 ">
-					    <div class="thumbnail">
-					      <img src="../images/english.jpg" alt="English 1">
-					      <div class="caption">
-					        <h4>ENGLISH 1</h4>
-					        <p>Time Schedule: 8:00AM - 9:00AM</p>
-					        <p>
-					        	<a href="courseTeacher.php" class="btn btn-primary" role="button">Open Course</a> 
-					        	<a href="#" class="btn btn-default" role="button">Unteach</a>
-					        </p>
-					      </div>
-					    </div>
-					</div>
-
-					<div class="col col-sm-3">
-					    <div class="thumbnail">
-					      <img src="../images/plus.png" alt="Add Course">
-					      <div class="caption">
-					        <h5 class='text-center'> Interested in teaching another course?</h5>
-					        <p class='text-center'>
-					        	<a href="dashboardTeacherStartNewCourse.php" class="btn btn-default" role="button">Start New Course</a>
-					        </p>
-					      </div>
-					    </div>
+					<div class="col col-sm-5 ">
+					    <div class="panel panel-default">
+			  			<!-- Default panel contents -->
+			  				<div class="panel-heading assignment_heading">
+			  					<!-- <span class='glyphicon glyphicon-'></span> -->
+			  					Start New Course
+						  	</div>
+				  			<div class="panel-body">
+				  				<div class="input-group">
+					  				<span class="input-group-addon">
+						        		<b>Course Name</b>
+						      		</span>
+						      		<input type="text" class="form-control" placeholder="">
+			    				</div>
+			    				<br>
+			    				<div class="input-group">
+					  				<span class="input-group-addon">
+						        		<b>Schedule</b>
+						      		</span>
+						      		<input type="text" class="form-control" placeholder="">
+			    				</div>
+							</div>
+							<div class="panel-footer">
+								<a href="#" class="btn btn-primary" role="button">Create Course</a> 
+								<a href="dashboardTeacher.php" class="btn btn-default" role="button">Cancel</a> 
+							</div>
+						</div>
 					</div>
 				</div>
 

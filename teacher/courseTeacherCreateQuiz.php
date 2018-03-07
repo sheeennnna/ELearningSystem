@@ -1,3 +1,41 @@
+<?php
+$notif = '';
+$error = '';
+
+if(isset($_POST["submit"])){
+	if (empty($_POST['quizTitle']) || empty($_POST['quizInstructions'])|| empty($_POST['quizTimeLimit'])) {
+		$notif = "<div class='alert alert-danger' role='alert'> Please fill out all necessary inputs</div>";
+		// echo "<div class='alert alert-danger' role='alert'>".$_POST['typeResult']."</div>";
+	}else{
+		if(file_exists('json/quiz.json')){  
+	        $data = file_get_contents('json/quiz.json');
+	        $dataArray = json_decode($data, true);//for insertion
+
+			$quizArr = json_decode($data);//for counter checking
+			$IDcounter = count($quizArr);//counts how many objects/arrays are in the json file
+
+	        $quiz = array(
+	        	'QuizID' => ++$IDcounter,
+	        	'QuizTitle' => $_POST['quizTitle'],
+	        	'QuizInsTructions' => $_POST['quizInstructions'],
+	        	'QuizTimeLimit' => $_POST['quizTimeLimit'],
+	        	'QuizDueDate' => $_POST['quizDueDate']
+	        );
+
+	        $dataArray [] = $quiz;
+	        $passedData = json_encode($dataArray);
+
+	        if(file_put_contents('json/quiz.json', $passedData)){  
+	            // $notif = "<div class='alert alert-success' role='alert'> Quiz Succesfully Created</div>";
+	            header("location:courseTeacherCreateQuizQuestions.php?pid=".$IDcounter."");
+	            // echo $IDcounter;
+	        } 
+	    }else{  
+	        $error = 'JSON File not exits';  
+	    }
+	}
+}
+?>
 <html>
 <head>
 	<link rel='stylesheet' href="css/handledCourse.css">
@@ -9,6 +47,12 @@
 	<script src="../bootstrap/js/bootstrap.min.js"></script>
 
 	<title>Dashboard</title>
+
+	<style>
+		#tof, #mc{
+			display: none;
+		} 
+	</style>
 </head>
 <body>
 	<div class='row'>
@@ -81,24 +125,30 @@
 				</ul>
 				<br><br>
 			</div>
-		<div class='col col-md-10' style='padding-left:50px'> 
+		<div class='col col-md-10' style='padding-left:50px; overflow-y: scroll; height:560px;'> 
 			<div class="panel panel-primary">
 			  <!-- Default panel contents -->
 			  <div class="panel-heading assignment_heading">
 			  	<span class='glyphicon glyphicon-file'></span> Create Quiz
 			  </div>
 			  <div class="panel-body">
+			  	<form method="POST">
 			  		<div class="col-md-11">
 			  			<h4>Details</h4><hr>
+			  			<?php   
+                     		if(isset($notif)){  
+                          		echo $notif;  
+                     		}  
+                     	?> 
 			  			<div class="input-group">
 					  		<span class="input-group-addon">
 						        <b>Title</b>
 						      </span>
-						      <input type="text" class="form-control" placeholder="">
+						      <input type="text" class="form-control" placeholder="" required="required" name="quizTitle">
 			    		</div>
 			    		<br>
 			    		<b>Quiz Instructions</b>
-			    		<textarea class="form-control"></textarea>
+			    		<textarea class="form-control" required="required" name="quizInstructions"></textarea>
 			    		<br>
 			    		<div class="row">
 			    			<div class="col-md-6">
@@ -106,7 +156,7 @@
 						  			<span class="input-group-addon">
 							        	<b>Time Limit</b>
 							     	</span>
-						      		<input type="text" class="form-control" placeholder="Minutes">
+						      		<input type="text" class="form-control" placeholder="Minutes" name="quizTimeLimit" pattern="(0?[1-5][5-9])" title="From 15-59 minutes only">
 			    				</div>
 			    			</div>
 				    		<div class="form-group">
@@ -114,49 +164,24 @@
 	                				<span class="input-group-addon">
 	                					<b>Due Date</b>
 	                    			</span>
-	                   				<input type='text' class="form-control" />
-	                   				<span class="input-group-addon">
-	                        			<span class="glyphicon glyphicon-calendar"></span>
-	                    			</span>
+	                   				<input type='date' class="form-control" name="quizDueDate" />
 	               			 	</div>
 	               			 	<br>
 	           				</div>
 			    		</div>
-           				<!-- <script type="text/javascript">
-   							$(function () {
-         						$('#datetimepicker1').datetimepicker();
-   							});
-						</script> 
-						WILL WORK ON THIS PA
-						-->
 
-			    		<!--*Insert here kadtong textarea with the formating options nga very laysho but for now text area lang sa:*</p>-->
-
-			    		<h4>Questions</h4><hr>
-			    		<div class="form-group">
-    						<!-- <label for="exampleFormControlTextarea1">Content</label> -->
-	    					<!-- <textarea class="form-control" id="exampleFormControlTextarea1" rows="7"> -->
-	    						<ol type='1'>
-									<li><input type='text' class="form-control" value=""/></li>
-									<li><input type='text' class="form-control" value=""/></li>
-									<li><input type='text' class="form-control" value=""/> </li>
-								</ol>
-	    					<!-- </textarea> -->
-  						</div>
-
-  						<div class="col-md-offset-9">
-			    			<div class="col-md-6">
-			    				<button type="button" class="btn btn-primary"><span class='glyphicon glyphicon-ok'></span> Create</button>
-			    			</div>
-			    			
-			    			<div class="col-md-6">
-			    				<a href="courseTeacherQuizzes.php">
-			    					<button type="button" class="btn"><span class='glyphicon glyphicon-remove'></span> Cancel</button>
-			    				</a>
-			    			</div>	
+			    		<!-- CREATION?CANCELATION BUTTON -->
+  						<div class="col-md-11">
+			    			<input type="submit" name="submit" value="Proceed to Questions" class="btn btn-primary" />
+			    			<a href="courseTeacherQuizzes.php">
+			    				<button type="button" class="btn">Cancel</button>
+			    			</a>
 			    		</div>
 			  		</div>
-
+			  	</form>
+			  	<!-- <a href="courseTeacherCreateQuizQuestions.php">
+			  		<button class="btn btn-primary">Proceed to Questions</button>
+			  	</a> -->
 			</div>
 		</div>
 	</div>
@@ -164,9 +189,43 @@
 </body>
 
 </html>
-<!-- <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 <script>
-	$('.recent_activity_nav').click(function() {
-    	$('.home_announcements').slideToggle("slow");
-	}); 
-</script> -->
+// var types = document.getElementById('qType').value;
+// var val;
+
+// function type1(){
+//     val = document.getElementById('t1').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('mc').style.display = 'block';
+//     document.getElementById('tof').style.display = 'none';
+// }
+
+// function type2(){
+//     val = document.getElementById('t2').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('tof').style.display = 'block';
+//     document.getElementById('mc').style.display = 'none';
+// }
+
+// function type3(){
+//     val = document.getElementById('t3').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('tof').style.display = 'block';
+//     document.getElementById('mc').style.display = 'none';
+// }
+
+// function addDiv(){
+// 	// Your existing code unmodified...
+// var iDiv = document.createElement('div');
+// iDiv.id = 'qs';
+// iDiv.className = 'block';
+// document.getElementsByTagName('body')[0].appendChild(iDiv);
+
+// // Now create and append to iDiv
+// var innerDiv = document.createElement('div');
+// innerDiv.className = 'block-2';
+
+// // The variable iDiv is still good... Just append to it.
+// iDiv.appendChild(innerDiv);
+//}
+</script>

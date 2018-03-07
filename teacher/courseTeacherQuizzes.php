@@ -93,32 +93,46 @@
 			   			</a>
 			   <br><br>
 			  	<div>
-				    <ul class="list-group" style='height:30%; overflow-y: scroll;'>
+				    <ul class="list-group" style='height:25%; overflow-y: scroll;'>
 					    <li class="list-group-item">
 					    	<b><span class="glyphicon glyphicon-play"></span> Undated Quizzes</b>
 					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-edit pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherQuizSingle.php'><h4>Before Discussion Quiz</h4></a>
-									-/100pts
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="courseTeacherEditQuiz.php">Edit</a></li>
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									      <li><a href="">Close</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
+
+					    <?php
+					    	$data = file_get_contents('json/quiz.json');
+							$quizArr = json_decode($data);
+
+							if(count($quizArr) > 0){
+								foreach ($quizArr as $qz) {
+						    		echo"<li class='list-group-item'>";
+									echo "<div class='row'>";
+									echo "<div class='col-md-1'>
+											<h4><span class='glyphicon glyphicon-edit pull-right'></span></h4>
+										  </div>";
+									echo "<div class='col-md-10'>
+								    			<a href='courseTeacherQuizSingle.php?pid=".$qz->QuizID."' name='quizSingle'><h4>".$qz->QuizTitle."</h4></a>
+												-/100pts
+								    		</div>";
+								    echo "<div class='col-md-1'>
+								    			<div class='btn-group' role='group'>
+			    									<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>
+			      									<span class='glyphicon glyphicon-cog pull-right'></span></button>
+												    <ul class='dropdown-menu'>
+												      <li><a href='courseTeacherEditQuiz.php'>Edit</a></li>
+												      <li><a href='#' data-toggle='modal' data-target='#modalDelete'> Delete</a></li>
+												      <li><a href='#'>Close</a></li>
+												    </ul>
+			  									</div>
+								    		</div>";
+									echo "</div>";
+						   			echo" </li>";
+						    	}
+					    	}else{
+					    		echo"<li class='list-group-item'>";
+					    		echo "<i><p>No data to show</p><i>";
+					    		echo "<li>";
+					    	}
+					    ?>
 				  	</ul>
 				  	<ul class="list-group" style='height:30%; overflow-y: scroll;'>
 					    <li class="list-group-item">

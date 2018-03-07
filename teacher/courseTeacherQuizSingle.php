@@ -1,3 +1,6 @@
+<?php
+	// echo $_GET['pid'];
+?>
 <html>
 <head>
 	<link rel='stylesheet' href="css/handledCourse.css">
@@ -82,25 +85,60 @@
 				<br><br>
 			</div>
 		<div class='col col-md-9 announcement_teacher' style='padding-left:50px'> 
-			<div class="col-md-10">
-				<h2>Quiz Title</h2>
+			<div class='col-md-10'>
+			<?php
+				$data = file_get_contents('json/quiz.json');
+				$quizArr = json_decode($data);
+
+				foreach ($quizArr as $qz) {
+					if($qz->QuizID == $_GET['pid']){
+						
+						echo "<h2>".$qz->QuizTitle."</h2>
+							  <a href='courseTeacherEditQuiz.php'>
+							 	<button type='button' class='btn btn-primary col-md-offset-8'> Edit Quiz</button>
+							  </a><hr>";
+						echo "<b>Due </b>";
+						if($qz->QuizDueDate == ""){
+							echo "No Due Date";
+						}
+						echo "<hr>";						
+					}
+				}
+				echo "<b>Questions</b><br><br>";
+				echo "<ol type='1'>";
+				$qdata = file_get_contents('json/quizQuestions.json');
+				$qsArr = json_decode($qdata);
+
+				foreach ($qsArr as $questions) {
+					if($questions->QuizID == $_GET['pid']){
+						echo "<li>";
+						echo $questions->Question;
+						echo "</li>";
+
+					}
+				}
+				echo "</div>";
+			?>
+
+			<!-- <div class="col-md-10"> -->
+				<!-- <h2>Quiz Title</h2>
 				<a href='courseTeacherEditQuiz.php'>
-					<button type="button" class="btn btn-primary col-md-offset-8"> Edit Quiz</button>
+					<button type='button' class='btn btn-primary col-md-offset-8'> Edit Quiz</button>
 				</a>
-				<hr>
-				<b>Due</b> No Due Date <b>Points</b> 50  <b>Submitting</b> a file upload
-				<hr>
-				<b>Quiz Subtitle</b><br><br>
-				<ol type='1'>
+				<hr> -->
+				<!-- <b>Due</b> No Due Date <b>Points</b> 50  <b>Submitting</b> a file upload
+				<hr> -->
+				<!-- <b>Quiz Subtitle</b><br><br> -->
+				<!-- <ol type='1'>
 				<li>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo? </li>
 				<li>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore verita? Why?</li>
-				<li>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritaLorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo? </li>
-			</div>
-			<div class="col-md-2">
+				<li>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritaLorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo? </li> -->
+			<!-- </div> -->
+			<!-- <div class="col-md-2">
 				<h4>Submission</h4>
 				<h5><span class='glyphicon glyphicon-ok'></span> Tuned In!</h5>
 				Dec 12, 2017 at 3:38pm
-			</div>
+			</div> -->
 		</div>
 	</div>
 </body>

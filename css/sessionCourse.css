@@ -1,0 +1,43 @@
+/*FONTS*/
+@font-face {
+	font-family: lemonFont;
+	src: url('fonts/LemonMilk.otf');
+}
+
+@font-face {
+	font-family: bebasFont;
+	src: url('fonts/BebasNeue.otf');
+	font-weight: lighter;
+}
+
+@font-face {
+	font-family: optimusFont;
+	src: url('fonts/OptimusPrinceps.ttf');
+}
+
+@font-face {
+	font-family: robotoFont;
+	src: url('fonts/Roboto.ttf');
+}
+
+.session_student_name{
+	font-size:20px;
+}
+
+.session_student_status{
+	font-size:15px;
+}
+
+.stud_status{
+	font-family:robotoFont;
+}
+
+.session_student_icon{
+	background-color:#eee;
+	border-radius: 10px;
+}
+
+.session_student_pic{
+	height:100px;
+	width:100px;
+}
