@@ -1,3 +1,44 @@
+<?php
+	$notif = '';
+	$error = '';
+
+	if(isset($_POST['submit'])){
+		if(empty($_POST['fName']) || empty($_POST['lName']) || empty($_POST['email']) || empty($_POST['address']) || empty($_POST['birthday']) || empty($_POST['password']) || empty($_POST['contactNumber']) || empty($_POST['gender'])){
+			
+			$notif = "<label class='text-danger'>Please fill the necessary information</label>";
+
+		}else{
+			if(file_exists('json/teachers.json')){  
+	        	$data = file_get_contents('json/teachers.json');
+	        	$dataArray = json_decode($data, true);
+
+	        	$teacherArr = json_decode($data);
+	        	$IDCounter = count($teacherArr);
+	        	$teacher = array(
+	        		'id' => ++$IDCounter,
+	        		'first_name' => $_POST['fName'],
+	        		'last_name' => $_POST['lName'],
+	        		'email' => $_POST['email'],
+	        		'address' => $_POST['address'],
+	        		'gender' => $_POST['gender'],
+	        		'birthday' => $_POST['birthday'],
+	        		'password' => $_POST['password'],
+	        		'contact_number' => $_POST['contactNumber']
+	       		);
+
+	        	$dataArray [] = $teacher;
+	        	$passedData = json_encode($dataArray);
+
+	        	if(file_put_contents('json/teachers.json', $passedData)){  
+	            	$notif = "<label class='text-success'>Teacher Succesfully Registered</label>";  
+	        	} 
+	    	}else{  
+	        	$error = 'JSON File not exits';  
+	    	}
+		}
+	}
+?>
+
 <html>
 	<head>
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
@@ -20,17 +61,23 @@
 						<h2 id="stud">TEACHER</h2>
 						<br><br>
 						<form action="" method="POST" autocomplete="off">
+
+						<?php   
+                     		if(isset($notif)){  
+                          		echo $notif;  
+                     		}  
+                     	?>
 							<div class="form-group row">			
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="First Name"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="First Name" name="fName"></input>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Last Name"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Last Name" name="lName"></input>
 									</div>
 								</div>
 							</div>
@@ -38,7 +85,7 @@
 								<div class="col-md-12">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Email"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Email" name="email"></input>
 									</div>
 								</div>
 							</div>
@@ -46,52 +93,43 @@
 								<div class="col-md-12">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Address"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Address" name="address"></input>
 									</div>
 								</div>
 							</div>
 							<div class="form-group row">			
-								<div class="col-md-3"> 
-									<div class="dropdown">
-										<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Gender <span class="caret"></span></button>
-										<ul class="dropdown-menu">
-											<li><a href="#">Male</a></li>
-											<li><a href="#">Female</a></li>
-											<li><a href="#">Other</a></li>
-											<li><a href="#">Rather not say</a></li>
-										</ul>
-									</div>
+								<div class="col-md-4"> 
+									<select id="inputs" class="form-control" name="gender">
+											<option disabled="" selected>Gender</option>
+											<option value="Male">Male</option>
+											<option value="Female">Female</option>
+									
+									</select>
 								</div> 
-								<div class="col-md-5">
-									<div id="bday" class="input-group">
-										<span class="input-group-addon">Birthday</span>
-										<input type="date" required="required" class="form-control" id="t_bday"></input>
-									</div>
-								</div>
-								<div class="col-md-4">
+								<div class="col-md-8">
 									<div class="input-group">
-										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										<input type="text" required="required" class="form-control" placeholder="ID"></input>
+										<span class="input-group-addon">Birthday</span>
+										<input type="date" required="required" class="form-control" id="teacherbday" name="birthday"></input>
 									</div>
-								</div>		
+								</div>	
 							</div>
 							<div class="form-group row">			
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-										<input type="password" required="required" class="form-control" id="inputs" placeholder="Password"></input>
+										<input type="password" required="required" class="form-control" id="inputs" placeholder="Password" name="password"></input>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Contact Number"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Contact Number" name="contactNumber"></input>
 									</div>
 								</div>	
 							</div>
 							<div class="form-group row">
 								<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-									<button id="regbtn" type="submit" class="btn btn-md">REGISTER</button>
+									<button id="regbtn" type="submit" name="submit" class="btn btn-md">REGISTER</button>
 								</div>
 							</div>
 						</form>

@@ -1,7 +1,48 @@
+<?php
+	$notif = '';
+	$error = '';
+
+	if(isset($_POST['submit'])){
+		if(empty($_POST['fName']) || empty($_POST['lName']) || empty($_POST['email']) || empty($_POST['address']) || empty($_POST['birthday']) || empty($_POST['password']) || empty($_POST['contactNumber']) || empty($_POST['grade']) || empty($_POST['gender'])){
+			
+			$notif = "<label class='text-danger'>Please fill the necessary information</label>";
+
+		}else{
+			if(file_exists('json/students.json')){  
+	        	$data = file_get_contents('json/students.json');
+	        	$dataArray = json_decode($data, true);
+	        	
+	        	$studentArr = json_decode($data);
+	        	$IDCounter = count($studentArr);
+	        	$student = array(
+	        		'id' => ++$IDCounter,
+	        		'first_name' => $_POST['fName'],
+	        		'last_name' => $_POST['lName'],
+	        		'email' => $_POST['email'],
+	        		'address' => $_POST['address'],
+	        		'gender' => $_POST['gender'],
+	        		'birthday' => $_POST['birthday'],
+	        		'Grade' => $_POST['grade'],
+	        		'password' => $_POST['password'],
+	        		'contact_number' => $_POST['contactNumber']
+	       		);
+
+	        	$dataArray [] = $student;
+	        	$passedData = json_encode($dataArray);
+
+	        	if(file_put_contents('json/students.json', $passedData)){  
+	            	$notif = "<label class='text-success'>Student Succesfully Registered</label>";  
+	        	} 
+	    	}else{  
+	        	$error = 'JSON File not exits';  
+	    	}
+		}
+	}
+?>
 <html>
 	<head>
 		<link rel="stylesheet" href="bootstrap/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/loginStyle.css">
+		<link rel="stylesheet" href="css/loginStyle.css"> -->
 		<meta name="viewport" content="width=device-width, initial-scale=1">
   		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
   		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
@@ -19,18 +60,24 @@
 					<div id="studentside">
 						<h2 id="stud">STUDENT</h2>
 						<br><br>
-						<form action="" method="POST" autocomplete="off">
+						<form method="POST" autocomplete="off">
+
+						<?php   
+                     		if(isset($notif)){  
+                          		echo $notif;  
+                     		}  
+                     	?>
 							<div class="form-group row">			
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="First Name"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="First Name" name="fName"></input>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-user"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Last Name"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Last Name" name="lName"></input>
 									</div>
 								</div>
 							</div>
@@ -38,7 +85,7 @@
 								<div class="col-md-12">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-envelope"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Email"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Email" name="email"></input>
 									</div>
 								</div>
 							</div>
@@ -46,58 +93,52 @@
 								<div class="col-md-12">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-globe"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Address"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Address" name="address"></input>
 									</div>
 								</div>
 							</div>
 							<div class="form-group row">			
-								<div class="col-md-3"> 
-									<div class="dropdown">
-										<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Gender <span class="caret"></span></button>
-										<ul class="dropdown-menu">
-											<li><a href="#">Male</a></li>
-											<li><a href="#">Female</a></li>
-											<li><a href="#">Other</a></li>
-											<li><a href="#">Rather not say</a></li>
-										</ul>
-									</div>
-								</div> 
 								<div class="col-md-6">
-									<div id="bday" class="input-group">
-										<span class="input-group-addon">Birthday</span>
-										<input type="date" required="required" class="form-control" id="birthday"></input>
+									<div class="input-group">
+										<span id="bday" class="input-group-addon">Birthday</span>
+										<input type="date" required="required" class="form-control" id="birthday" name="birthday"></input>
 									</div>
-								</div>		
-								<div id="grade" class="col-md-3"> 
-									<div class="dropdown">
-										<button class="btn dropdown-toggle" type="button" data-toggle="dropdown">Grade Level <span class="caret"></span></button>
-										<ul class="dropdown-menu">
-											<li><a href="#">1</a></li>
-											<li><a href="#">2</a></li>
-											<li><a href="#">3</a></li>
-											<li><a href="#">4</a></li>
-											<li><a href="#">5</a></li>
-										</ul>
-									</div>
+								</div>
+								<div id="gender" class="col-md-3"> 
+									<select placeholder="Gender" id="inputs" class="form-control" name="gender">
+										<option disabled="" selected>Gender</option>
+										<option value="Male">Male</option>
+										<option value="Female">Female</option>
+									</select>
+								</div> 		
+								<div class="col-md-3"> 
+									<select id="inputs" class="form-control" name="grade">
+											<option disabled="" selected>Grade</option>
+											<option value="one">1</option>
+											<option value="two">2</option>
+											<option value="three">3</option>
+											<option value="four">4</option>
+											<option value="five">5</option>
+									</select>
 								</div> 
 							</div>
 							<div class="form-group row">			
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-lock"></i></span>
-										<input type="password" required="required" class="form-control" id="inputs" placeholder="Password"></input>
+										<input type="password" required="required" class="form-control" id="inputs" placeholder="password" name="password"></input>
 									</div>
 								</div>
 								<div class="col-md-6">
 									<div class="input-group">
 										<span class="input-group-addon"><i class="glyphicon glyphicon-phone"></i></span>
-										<input type="text" required="required" class="form-control" id="inputs" placeholder="Contact Number"></input>
+										<input type="text" required="required" class="form-control" id="inputs" placeholder="Contact Number" name="contactNumber"></input>
 									</div>
 								</div>	
 							</div>
 							<div class="form-group row">
 								<div class="col-md-offset-4 col-md-4 col-md-offset-4">
-									<button id="regbtn" type="submit" class="btn btn-md">REGISTER</button>
+									<input id="regbtn" type="submit" name="submit" class="btn btn-md">
 								</div>
 							</div>
 						</form>
