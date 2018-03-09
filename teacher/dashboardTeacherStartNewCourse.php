@@ -1,3 +1,37 @@
+<?php
+	$notif = '';
+	$error = '';
+
+	if(isset($_POST['createCourseBtn'])){
+		if(empty($_POST['courseName']) || empty($_POST['sched'])){
+			
+			$notif = "<label class='text-danger'>Please fill the necessary information</label>";
+
+		}else{
+			if(file_exists('json/courses.json')){  
+	        	$data = file_get_contents('json/courses.json');
+	        	$dataArray = json_decode($data, true);
+
+	        	$courseArr = json_decode($data);
+	        	$IDCounter = count($courseArr);
+	        	$course = array(
+	        		'id' => ++$IDCounter,
+	        		'course_name' => $_POST['courseName'],
+	        		'schedule' => $_POST['sched']
+	       		);
+
+	        	$dataArray [] = $course;
+	        	$passedData = json_encode($dataArray);
+
+	        	if(file_put_contents('json/courses.json', $passedData)){  
+	            	$notif = "<label class='text-success'>Course Succesfully Added</label>";  
+	        	} 
+	    	}else{  
+	        	$error = 'JSON File not exits';  
+	    	}
+		}
+	}
+?>
 <html>
 <head>
 	<link rel='stylesheet' href="css/dashboardCSSTeacher.css">
@@ -74,23 +108,32 @@
 			  					Start New Course
 						  	</div>
 				  			<div class="panel-body">
+				  			<?php   
+                     			if(isset($notif)){  
+                          			echo $notif;  
+                     			}  
+                     		?>
+                     		<form method="POST">
 				  				<div class="input-group">
 					  				<span class="input-group-addon">
 						        		<b>Course Name</b>
 						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
+						      		<input type="text" class="form-control" placeholder="" name="courseName">
 			    				</div>
 			    				<br>
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
 						        		<b>Schedule</b>
 						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
+						      		<input type="text" class="form-control" placeholder="" name="sched">
 			    				</div>
 							</div>
 							<div class="panel-footer">
-								<a href="#" class="btn btn-primary" role="button">Create Course</a> 
-								<a href="dashboardTeacher.php" class="btn btn-default" role="button">Cancel</a> 
+								<!-- <a href="#" class="btn btn-primary" role="button">Create Course</a>  -->
+								
+									<input type="submit" value="Create Course" name="createCourseBtn" class="btn btn-primary">
+									<a href="dashboardTeacher.php" class="btn btn-default" role="button">Cancel</a> 
+							</form>
 							</div>
 						</div>
 					</div>
