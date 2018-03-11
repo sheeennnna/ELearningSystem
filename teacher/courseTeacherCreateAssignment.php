@@ -1,3 +1,63 @@
+<?php
+$notif = '';
+$error = '';
+
+if(isset($_POST["submit"])){
+	if (empty($_POST['assignmentTitle']) || empty($_POST['assignmentContent']) || empty($_POST['assignmentPoints']) || empty($_POST['submissionType'])) {
+		$notif = "<div class='alert alert-danger' role='alert'> Please fill out all necessary inputs</div>";
+		// echo "<div class='alert alert-danger' role='alert'>".$_POST['typeResult']."</div>";
+	}else{
+		if(file_exists('json/assignment.json')){  
+	        $data = file_get_contents('json/assignment.json');
+	        $dataArray = json_decode($data, true);//for insertion
+
+			$assignmentArr = json_decode($data);//for counter checking
+			$assID = uniqid();
+
+			if(empty($_POST['assignmentDate'])){
+				$aDate = "No Due Date";
+			}else{
+				$aDate = $_POST['assignmentDate'];
+				$aDate = date("F d Y", $aDate);
+			}
+
+			if(empty($_POST['assignmentTime'])){
+				$aTime = "No Time";
+			}else{
+				$aTime = $_POST["assignmentTime"];
+				$aTime = date('h:i a',strtotime($aTime));
+			}
+
+			if($_POST["assStatus"] == "Open"){
+				$aStatus = "Opened";
+			}else{
+				$aStatus = "Closed";
+			}
+			
+
+	        $quiz = array(
+	        	'assignmentID' => $assID,
+	        	'assignmentTitle' => $_POST['assignmentTitle'],
+	        	'assignmentContent' => $_POST['assignmentContent'],
+	        	'assignmentSubmissionType' => $_POST['submissionType'],
+	        	'assignmentPoints' => $_POST['assignmentPoints'],
+	        	'assignmentDate' => $aDate,
+	        	'assignmentTime' => $aTime,
+	        	'assignmentStatus' => $aStatus
+	        );
+
+	        $dataArray [] = $quiz;
+	        $passedData = json_encode($dataArray);
+
+	        if(file_put_contents('json/assignment.json', $passedData)){  
+	            header("location:courseTeacherAssignment.php");
+	        } 
+	    }else{  
+	        $error = 'JSON File not exits';  
+	    }
+	}
+}
+?>
 <html>
 <head>
 	<link rel='stylesheet' href="css/handledCourse.css">
@@ -9,6 +69,12 @@
 	<script src="../bootstrap/js/bootstrap.min.js"></script>
 
 	<title>Dashboard</title>
+
+	<style>
+		#tof, #mc{
+			display: none;
+		} 
+	</style>
 </head>
 <body>
 	<div class='row'>
@@ -50,7 +116,7 @@
 					<h3>
 						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> ENGLISH 1
 						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
-						<span class='add_announcement'>Assignments</span>
+						<span class='add_announcement'>Quizzes</span>
 
 					</h3>
 				</div>
@@ -81,86 +147,86 @@
 				</ul>
 				<br><br>
 			</div>
-		<div class='col col-md-10' style='padding-left:50px'> 
+		<div class='col col-md-10' style='padding-left:50px; overflow-y: scroll; height:560px;'> 
 			<div class="panel panel-primary">
 			  <!-- Default panel contents -->
 			  <div class="panel-heading assignment_heading">
 			  	<span class='glyphicon glyphicon-file'></span> Create Assignment
 			  </div>
 			  <div class="panel-body">
+			  	<form method="POST">
 			  		<div class="col-md-11">
-				  			<div class="input-group">
-						  		<span class="input-group-addon">
-							        <b>Title</b>
-							      </span>
-							      <input type="text" class="form-control" placeholder="">
-				    		</div>
-			    		<br>
-			    		<!-- <div class="input-group">
+			  			<?php   
+                     		if(isset($notif)){  
+                          		echo $notif;  
+                     		}  
+                     	?> 
+			  			<div class="input-group">
 					  		<span class="input-group-addon">
-						        <b>Subtitle</b>
+						        <b>Assignment Title</b>
 						      </span>
-						      <input type="text" class="form-control" placeholder="">
-			    		</div> -->
+						      <input type="text" class="form-control" placeholder="" required="required" name="assignmentTitle">
+			    		</div>
+			    		<br>
+			    		
+			    		<div class="form-group">
+    						<label for="exampleFormControlTextarea1">Content</label>
+	    					<textarea class="form-control" name="assignmentContent" id="exampleFormControlTextarea1" placeholder="Assignment Content" rows="10" required="required"></textarea>
+  						</div>
+
+			    		<br>
 			    		<div class="row">
-			    			<div class="col-md-6">
+			    			<div class="col-md-3">
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
-						        		<b>Submission Type</b>
+						        		<b>Type</b>
 						      		</span>
-						      		<input type="text" class="form-control" placeholder="On Paper">
+						      		<select class="form-control" name="submissionType">
+								    	<option value="On Paper">On Paper</option>
+								  	</select>
 			    				</div>
 			    			</div>
-			    			<div class="col-md-6">
+			    			<div class="col-md-2">
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
 						        		<b>Points</b>
 						      		</span>
-						      		<input type="text" class="form-control" placeholder="">
+						      		<input type="text" pattern="\d*" title="Number only" name="assignmentPoints" class="form-control" required="required">
 			    				</div>
 			    			</div>
+			    			<div class="form-group col-md-2">
+	                			<div class='input-group date' id='datetimepicker1'>
+	                				<span class="input-group-addon">
+	                					<b>Due Date</b>
+	                    			</span>
+	                   				<input type='date' name="assignmentDate" class="form-control" />
+	               			 	</div>
+	           				</div>
+	           				<div class="form-group col-md-2 col-md-offset-2">
+	                			<div class='input-group time'>
+	                				<span class="input-group-addon">
+	                					<b>Until</b>
+	                    			</span>
+	                   				<input type='time' name="assignmentTime" class="form-control" />
+	               			 	</div>
+	           				</div>
 			    		</div>
+			    		<label>Status:</label>
+			    		<label class="checkbox-inline"><input type="checkbox" name="assStatus" value="Open">Open</label>
 			    		<br>
-			    		<div class="form-group">
-                			<div class='input-group date' id='datetimepicker1'>
-                				<span class="input-group-addon">
-                					<b>Due Date</b>
-                    			</span>
-                   				<input type='text' class="form-control" />
-                   				<span class="input-group-addon">
-                        			<span class="glyphicon glyphicon-calendar"></span>
-                    			</span>
-               			 	</div>
-           				</div>
-           				<!-- <script type="text/javascript">
-   							$(function () {
-         						$('#datetimepicker1').datetimepicker();
-   							});
-						</script> 
-						WILL WORK ON THIS PA
-						-->
 
-			    		<!--*Insert here kadtong textarea with the formating options nga very laysho but for now text area lang sa:*</p>-->
-			    		<div class="form-group">
-    						<label for="exampleFormControlTextarea1">Content</label>
-	    					<textarea class="form-control" id="exampleFormControlTextarea1" rows="7">
-	    						
-	    					</textarea>
-  						</div>
-
-			    		<div class="col-md-offset-9">
-			    			<div class="col-md-6">
-			    				<button type="button" class="btn btn-primary"><span class='glyphicon glyphicon-ok'></span> Create</button>
-			    			</div>
-			    			
-			    			<div class="col-md-6">
-			    				<a href="courseTeacherAssignment.php">
-			    					<button type="button" class="btn"><span class='glyphicon glyphicon-remove'></span> Cancel</button>
-			    				</a>
-			    			</div>	
+			    		<!-- CREATION?CANCELATION BUTTON -->
+  						<div class="col-md-offset-9">
+			    			<input type="submit" name="submit" value="Create" class="btn btn-primary" />
+			    			<a href="courseTeacherAssignment.php">
+			    				<button type="button" class="btn">Cancel</button>
+			    			</a>
 			    		</div>
 			  		</div>
-
+			  	</form>
+			  	<!-- <a href="courseTeacherCreateQuizQuestions.php">
+			  		<button class="btn btn-primary">Proceed to Questions</button>
+			  	</a> -->
 			</div>
 		</div>
 	</div>
@@ -168,9 +234,43 @@
 </body>
 
 </html>
-<!-- <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 <script>
-	$('.recent_activity_nav').click(function() {
-    	$('.home_announcements').slideToggle("slow");
-	}); 
-</script> -->
+// var types = document.getElementById('qType').value;
+// var val;
+
+// function type1(){
+//     val = document.getElementById('t1').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('mc').style.display = 'block';
+//     document.getElementById('tof').style.display = 'none';
+// }
+
+// function type2(){
+//     val = document.getElementById('t2').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('tof').style.display = 'block';
+//     document.getElementById('mc').style.display = 'none';
+// }
+
+// function type3(){
+//     val = document.getElementById('t3').value;
+//     document.getElementById('result').value = val;
+//     document.getElementById('tof').style.display = 'block';
+//     document.getElementById('mc').style.display = 'none';
+// }
+
+// function addDiv(){
+// 	// Your existing code unmodified...
+// var iDiv = document.createElement('div');
+// iDiv.id = 'qs';
+// iDiv.className = 'block';
+// document.getElementsByTagName('body')[0].appendChild(iDiv);
+
+// // Now create and append to iDiv
+// var innerDiv = document.createElement('div');
+// innerDiv.className = 'block-2';
+
+// // The variable iDiv is still good... Just append to it.
+// iDiv.appendChild(innerDiv);
+//}
+</script>

@@ -83,22 +83,23 @@
 			</div>
 		<div class='col col-md-9 announcement_teacher' style='padding-left:50px'> 
 			<div class="col-md-10">
-				<h2>Assignment Title</h2>
-				<a href = 'courseTeacherEditAssignment.php'>
-					<button type="button" class="btn btn-primary col-md-offset-8"> Edit Assignment</button>
-				</a>
-				<hr>
-				<b>Due</b> No Due Date <b>Points</b> 50  <b>Submitting</b> a file upload
-				<hr>
-				<b>Assignment Subtitle</b><br><br>
-				<p>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia</p>
-				<p>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore verita</p>
-				<p>Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritaLorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptat</p>
-			</div>
-			<div class="col-md-2">
-				<h4>Submission</h4>
-				<h5><span class='glyphicon glyphicon-ok'></span> Tuned In!</h5>
-				Dec 12, 2017 at 3:38pm
+				<?php
+				$data = file_get_contents('json/assignment.json');
+				$assArray = json_decode($data);
+
+				foreach ($assArray as $ass) {
+					if($ass->assignmentID == $_GET['assID']){
+						echo "<h2>".$ass->assignmentTitle."</h2>";
+						echo "<a href = 'courseTeacherEditAssignment.php?assID=".$ass->assignmentID."'>";
+							echo "<button type='button' class='btn btn-primary col-md-offset-8'> Edit Assignment</button>";
+						echo "</a>";
+						echo "<hr>";
+						echo "<b>Due</b> ".$ass->assignmentDate." at ".$ass->assignmentTime." <b>Points</b> ".$ass->assignmentPoints."  <b>Submitting</b> ".$ass->assignmentSubmissionType." <b>Status</b> ".$ass->assignmentStatus;
+						echo "<hr>";
+						echo "<p>".$ass->assignmentContent."</p>";
+					}
+				}	
+			?>
 			</div>
 		</div>
 	</div>

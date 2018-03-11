@@ -93,149 +93,103 @@
 			   			</a>
 			   <br><br>
 			  	<div>
-				    <ul class="list-group" style='height:30%; overflow-y: scroll;'>
-					    <li class="list-group-item">
-					    	<b><span class="glyphicon glyphicon-play"></span> Undated Assignments</b>
-					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-edit pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherAssignmentSingle.php'><h4>Pre-Test</h4></a>
-									-/100pts
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="courseTeacherEditAssignment.php">Edit</a></li>
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									      <li><a href="">Close</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-edit pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherAssignmentSingle.php'><h4>Exercise 1: Grammar Check</h4></a>
-									-/50pts
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="courseTeacherEditAssignment.php">Edit</a></li>
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									      <li><a href="">Close</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-edit pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherAssignmentSingle.php'><h4>Exercise 2: Vocabulary Check</h4></a>
-									-/30pts
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="courseTeacherEditAssignment.php">Edit</a></li>
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									      <li><a href="">Close</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
+			  		<b><span class="glyphicon glyphicon-play"></span> Undated Assignments</b>
+				    <ul class="list-group" style='height:20%; overflow-y: scroll;'>
+					    <?php
+					    	$data = file_get_contents('json/assignment.json');
+							$assignmentArray = json_decode($data);
+
+							if(count($assignmentArray) > 0){
+								foreach ($assignmentArray as $ass) {
+									if($ass->assignmentDate == "No Due Date"){
+										echo '<li class="list-group-item">';
+									    	echo '<div class="row">';
+									    		echo '<div class="col-md-1">';
+									    			echo '<h4><span class="glyphicon glyphicon-edit pull-right"></span></h4>';
+									    		echo '</div>';
+									    		echo '<div class="col-md-10">';
+									    			echo "<a href='courseTeacherAssignmentSingle.php?assID=".$ass->assignmentID."'><h4>".$ass->assignmentTitle."</h4></a>";
+													echo "<b>Status</b> ".$ass->assignmentStatus." | -/".$ass->assignmentPoints."pts";
+									    		echo '</div>';
+									    		echo '<div class="col-md-1">';
+									    			echo '<div class="btn-group" role="group">';
+				    									echo '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+				      									echo '<span class="glyphicon glyphicon-cog pull-right"></span></button>';
+													    echo '<ul class="dropdown-menu">';
+													      echo "<li><a href='courseTeacherEditAssignment.php?assID=".$ass->assignmentID."'>Edit</a></li>";
+													      echo "<li><a href='courseTeacherDeleteAssignment.php?assID=".$ass->assignmentID."'> Delete</a></li>";
+													      if($ass->assignmentStatus == "Opened"){
+													      	echo "<li><a href='courseTeacherOpenCloseAssignment.php?assID=".$ass->assignmentID."&&assStatus=Close'>Close</a></li>";
+													      }else{
+													      	echo "<li><a href='courseTeacherOpenCloseAssignment.php?assID=".$ass->assignmentID."&&assStatus=Open'>Open</a></li>";
+													      }
+													    echo '</ul>';
+				  									echo '</div>';
+									    		echo '</div>';
+									    	echo '</div>';
+									    echo '</li>';
+
+									}
+						    	}
+					    	}else{
+					    		echo"<li class='list-group-item'>";
+					    		echo "<i><p>No data to show</p><i>";
+					    		echo "<li>";
+					    	}
+					    ?>
 				  	</ul>
-				  	<ul class="list-group" style='height:30%; overflow-y: scroll;'>
-					    <li class="list-group-item">
-					    	<b><span class="glyphicon glyphicon-play"></span> Dated Assignments</b>
-					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-tasks pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherAssignmentSingle.php'><h4>Informal Theme 1: About Me</h4></a>
-									<b>Due</b> Jan 11, 2018 at 5:30pm | -/60 pts | Not Yet Graded
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="courseTeacherEditAssignment.php">Edit</a></li>
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
-					    <li class="list-group-item">
-					    	<div class="row">
-					    		<div class="col-md-1">
-					    			<h4><span class="glyphicon glyphicon-tasks pull-right"></span></h4>
-					    		</div>
-					    		<div class="col-md-10">
-					    			<a href='courseTeacherAssignmentSingle.php'><h4>Homework: Adjectives</h4></a>
-									<b>Closed | Due</b> Jan 4, 2018 at 4:30pm | <b>27</b>/30 pts
-					    		</div>
-					    		<div class="col-md-1">
-					    			<div class="btn-group" role="group">
-    									<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-      									<span class="glyphicon glyphicon-cog pull-right"></span></button>
-									    <ul class="dropdown-menu">
-									      <li><a href="#" data-toggle="modal" data-target="#modalDelete"> Delete</a></li>
-									    </ul>
-  									</div>
-					    		</div>
-					    	</div>
-					    </li>
+				  	<b><span class="glyphicon glyphicon-play"></span> Dated Assignments</b>
+				  	<ul class="list-group" style='height:20%; overflow-y: scroll;'>
+					    <?php
+					    	$data = file_get_contents('json/assignment.json');
+							$assignmentArray = json_decode($data);
+
+							if(count($assignmentArray) > 0){
+								foreach ($assignmentArray as $ass) {
+									if($ass->assignmentDate != "No Due Date"){
+								    echo "<li class='list-group-item'>";
+								    	echo "<div class='row'>";
+								    		echo "<div class='col-md-1'>";
+								    			echo "<h4><span class='glyphicon glyphicon-tasks pull-right'></span></h4>";
+								    		echo "</div>";
+								    		echo "<div class='col-md-10'>";
+								    			echo "<a href='courseTeacherAssignmentSingle.php?assID=".$ass->assignmentID."'><h4>".$ass->assignmentTitle."</h4></a>";
+												echo "<b>Status</b> ".$ass->assignmentStatus." | <b>Due</b> ".$ass->assignmentDate." at ".$ass->assignmentTime." | -/".$ass->assignmentPoints." pts | Not Yet Graded";
+								    		echo "</div>";
+								    		echo '<div class="col-md-1">';
+									    			echo '<div class="btn-group" role="group">';
+				    									echo '<button type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+				      									echo '<span class="glyphicon glyphicon-cog pull-right"></span></button>';
+													    echo '<ul class="dropdown-menu">';
+													      echo "<li><a href='courseTeacherEditAssignment.php?assID=".$ass->assignmentID."'>Edit</a></li>";
+													      echo "<li><a href='courseTeacherDeleteAssignment.php?assID=".$ass->assignmentID."'> Delete</a></li>";
+													      if($ass->assignmentStatus == "Opened"){
+													      	echo "<li><a href='courseTeacherOpenCloseAssignment.php?assID=".$ass->assignmentID."&&assStatus=Close'>Close</a></li>";
+													      }else{
+													      	echo "<li><a href='courseTeacherOpenCloseAssignment.php?assID=".$ass->assignmentID."&&assStatus=Open'>Open</a></li>";
+													      }
+													    echo '</ul>';
+			  									echo "</div>";
+								    		echo "</div>";
+								    	echo "</div>";
+								    echo "</li>";
+								    }	
+								}
+							}else{
+					    		echo"<li class='list-group-item'>";
+					    		echo "<i><p>No data to show</p><i>";
+					    		echo "<li>";
+					    	}
+					    ?>
 				  	</ul>
 			  	</div>
 			  </div>
 			</div>
 		</div>
 	</div>
-
-	<!-- Modal -->
-	<div id="modalDelete" class="modal fade" role="dialog">
-	    <div class="modal-dialog modal-sm">
-	        <!-- Modal content-->
-	        <div class="modal-content panel-danger">
-	            <div class="modal-body">
-	                <button type="button" class="close" data-dismiss="modal">&times;</button>
-	                <h4 class="modal-title">Are you sure you want to delete this assignment?</h4>
-	            </div>
-	            <div class="modal-footer">
-	            	<button type="button" class="btn btn-danger">Yes</button>
-	                <button type="button" class="btn btn-default" data-dismiss="modal">No</button>
-	            </div>
-	        </div>
-	    </div>
-	</div>
 </body>
 
 </html>
-
 <!-- <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.2.1.min.js"></script>
 <script>
 	$('.recent_activity_nav').click(function() {

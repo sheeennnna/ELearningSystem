@@ -1,3 +1,75 @@
+<?php
+$notif = '';
+$error = '';
+
+if(isset($_POST["submit"])){
+	
+	if(file_exists('json/assignment.json')){ 
+
+		if(empty($_POST['assignmentDate'])){
+			$aDate = "No Due Date";
+		}else{
+			$aDate = $_POST['assignmentDate'];
+			$aDate = date("F d Y", $aDate);
+		}
+
+		if(empty($_POST['assignmentTime'])){
+			$aTime = "No Time";
+		}else{
+			$aTime = $_POST["assignmentTime"];
+			$aTime = date('h:i a',strtotime($aTime));
+		}
+
+		if($_POST["assStatus"] == "Close"){
+			$aStatus = "Closed";
+		}else{
+			$aStatus = "Opened";
+		}
+
+        // read file
+		$data = file_get_contents('json/assignment.json');
+
+		// decode json to array
+		$assArray = json_decode($data, true);
+
+		foreach ($assArray as $key => $value) {
+		    if ($value['assignmentID'] == $_GET['assID']) {
+		        $assArray[$key]['assignmentTitle'] = $_POST['assignmentTitle'];
+		        $assArray[$key]['assignmentContent'] = $_POST['assignmentContent'];
+		        $assArray[$key]['assignmentSubmissionType'] = $_POST['assignmentSubmissionType'];
+		        $assArray[$key]['assignmentPoints'] = $_POST['assignmentPoints'];
+		        $assArray[$key]['assignmentDate'] = $aDate;
+		        $assArray[$key]['assignmentTime'] = $aTime;
+		        $assArray[$key]['assignmentStatus'] = $aStatus;
+		    }
+		}
+
+		// encode array to json and save to file
+		file_put_contents('json/assignment.json', json_encode($assArray));
+
+		
+
+        // $quiz = array(
+        // 	'assignmentID' => ++$IDcounter,
+        // 	'assignmentTitle' => $_POST['assignmentTitle'],
+        // 	'assignmentContent' => $_POST['assignmentContent'],
+        // 	'assignmentSubmissionType' => $_POST['submissionType'],
+        // 	'assignmentPoints' => $_POST['assignmentPoints'],
+        // 	'assignmentDate' => $aDate,
+        // 	'assignmentTime' => $aTime
+        // );
+
+        // $dataArray [] = $quiz;
+        // $passedData = json_encode($dataArray);
+
+        if(file_put_contents('json/assignment.json', json_encode($assArray))){  
+            header("location:courseTeacherAssignmentSingle.php?assID=".$_GET['assID']);
+        } 
+    }else{  
+        $error = 'JSON File not exits';  
+    }
+}
+?>
 <html>
 <head>
 	<link rel='stylesheet' href="css/handledCourse.css">
@@ -9,6 +81,11 @@
 	<script src="../bootstrap/js/bootstrap.min.js"></script>
 
 	<title>Dashboard</title>
+	<style>
+		#tof, #mc{
+			display: none;
+		} 
+	</style>
 </head>
 <body>
 	<div class='row'>
@@ -85,86 +162,97 @@
 			<div class="panel panel-primary">
 			  <!-- Default panel contents -->
 			  <div class="panel-heading assignment_heading">
-			  	<span class='glyphicon glyphicon-file'></span> Create Assignment
+			  	<span class='glyphicon glyphicon-file'></span> Edit Assignment
 			  </div>
-			  <div class="panel-body">
+			  <form method = 'POST'>
+			  <div class="panel-body" style='height:70%; overflow-y: scroll;'>
 			  		<div class="col-md-11">
-			  			<div class="input-group">
-					  		<span class="input-group-addon">
-						        <b>Title</b>
-						      </span>
-						      <input type="text" class="form-control" value="Lorem Ipsum">
-			    		</div>
+	  				<?php   
+                 		if(isset($notif)){  
+                      		echo $notif;  
+                 		} 
+
+						$data = file_get_contents('json/assignment.json');
+						$assArray = json_decode($data);
+
+						foreach ($assArray as $ass) {
+							if($ass->assignmentID == $_GET['assID']){
+							 
+                 	?>
+				  			<div class="input-group">
+
+						  		<span class="input-group-addon">
+							        <b>Assignment Title</b>
+							      </span>
+							      <input type="text" name="assignmentTitle" class="form-control" value =<?php echo $ass->assignmentTitle;?> placeholder="Assignment Title" required>
+				    		</div>
 			    		<br>
-			    		<div class="input-group">
-					  		<span class="input-group-addon">
-						        <b>Subtitle</b>
-						      </span>
-						      <input type="text" class="form-control" value="Objective: Lorem Ipsum Sed ut perspiciatis">
-			    		</div>
-			    		<br>
-			    		<div class="row">
-			    			<div class="col-md-6">
+			    		<div class="form-group">
+    						<label for="exampleFormControlTextarea1">Content</label>
+	    					<textarea class="form-control" name="assignmentContent" id="exampleFormControlTextarea1" rows="10" placeholder="Assignment Content" required>
+	    						<?php echo $ass->assignmentContent;?>
+	    					</textarea>
+  						</div>
+
+  						<div class="row">
+			    			<div class="col-md-3">
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
-						        		<b>Submission Type</b>
+						        		<b>Type</b>
 						      		</span>
-						      		<input type="text" class="form-control" value="a file upload">
+						      		<select class="form-control" name="assignmentSubmissionType">
+								    	<option value="On Paper"><?php echo $ass->assignmentSubmissionType;?></option>
+								  	</select>
 			    				</div>
 			    			</div>
-			    			<div class="col-md-6">
+			    			<div class="col-md-2">
 			    				<div class="input-group">
 					  				<span class="input-group-addon">
 						        		<b>Points</b>
 						      		</span>
-						      		<input type="text" class="form-control" value="50">
+						      		<input type="text" pattern="\d*" title="Number only" value =<?php echo $ass->assignmentPoints;?> name="assignmentPoints" class="form-control" required>
 			    				</div>
 			    			</div>
+			    			<div class="form-group col-md-2">
+	                			<div class='input-group date' id='datetimepicker1'>
+	                				<span class="input-group-addon">
+	                					<b>Due Date</b>
+	                    			</span>
+	                   				<input type='date' name="assignmentDate" value =<?php echo $ass->assignmentDate;?> class="form-control" />
+	               			 	</div>
+	           				</div>
+	           				<div class="form-group col-md-2 col-md-offset-2">
+	                			<div class='input-group time'>
+	                				<span class="input-group-addon">
+	                					<b>Until</b>
+	                    			</span>
+	                   				<input type='time' name="assignmentTime" value= <?php echo $ass->assignmentTime;?> class="form-control" />
+	               			 	</div>
+	           				</div>
 			    		</div>
+			    		<label>Status:</label>
+			    		<?php
+			    		if($ass->assignmentStatus == "Closed"){
+			    			echo "<label class='checkbox-inline'><input type='checkbox' name='assStatus' value='Open'>Open</label>";
+			    		}else{
+			    			echo "<label class='checkbox-inline'><input type='checkbox' name='assStatus' value='Close'>Close</label>";
+			    		}
+			    		?>
+			    		
 			    		<br>
-			    		<div class="form-group">
-                			<div class='input-group date' id='datetimepicker1'>
-                				<span class="input-group-addon">
-                					<b>Due Date</b>
-                    			</span>
-                   				<input type='text' class="form-control" value="Jan 11, 2018 at 5:30pm" />
-                   				<span class="input-group-addon">
-                        			<span class="glyphicon glyphicon-calendar"></span>
-                    			</span>
-               			 	</div>
-           				</div>
-           				<!-- <script type="text/javascript">
-   							$(function () {
-         						$('#datetimepicker1').datetimepicker();
-   							});
-						</script> 
-						WILL WORK ON THIS PA
-						-->
-
-			    		<!--*Insert here kadtong textarea with the formating options nga very laysho but for now text area lang sa:*</p>-->
-			    		<div class="form-group">
-    						<label for="exampleFormControlTextarea1">Content</label>
-	    					<textarea class="form-control" id="exampleFormControlTextarea1" rows="7">
-	    						Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptatem quia voluptas sit aspernatur aut odit aut fugit, sed quia
-
-								Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore verita
-
-								Lorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritaLorem Ipsum Sed ut perspiciatis unde omnis iste natus error sit voluptatem accusantium doloremque laudantium, totam rem aperiam, eaque ipsa quae ab illo inventore veritatis et quasi architecto beatae vitae dicta sunt explicabo. Nemo enim ipsam voluptat
-	    					</textarea>
-  						</div>
-
 			    		<div class="col-md-offset-9">
-			    			<div class="col-md-8">
-			    				<button type="button" class="btn btn-primary"><span class='glyphicon glyphicon-floppy-disk'></span> Save Changes</button>
-			    			</div>
-			    			
-			    			<div class="col-md-4">
-			    				<a href="courseTeacherAssignment.php">
-			    					<button type="button" class="btn"><span class='glyphicon glyphicon-remove'></span> Discard</button>
-			    				</a>
-			    			</div>	
+			    			<input type="submit" name="submit" value="Edit" class="btn btn-primary" />
+			    			<a href="courseTeacherAssignment.php">
+			    				<button type="button" class="btn">Cancel</button>
+			    			</a>
 			    		</div>
+			    	<?php
+			    		}
+					}
+			    	?>
 			  		</div>
+			</div>
+			</form>
 
 			</div>
 		</div>
