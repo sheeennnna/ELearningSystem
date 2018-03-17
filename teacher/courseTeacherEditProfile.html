@@ -25,7 +25,7 @@
 		<div class='col col-md-11 body_section'>
 			<div class='row'>
 				<div class='col col-md-10'> 
-					<h3>Account</h3>
+					<h3>Edit Account</h3>
 					<hr line> 
 				</div>
 			</div>
@@ -35,9 +35,21 @@
 				</div>
 				<form id = 'editAccount'>
 					<div class='col col-md-7' style='height:80%; overflow-y: scroll;'>
-						<span class='announcement_header' id='teacherFirstName'>  </span>
-						<span class='announcement_header' id='teacherLastName'>  </span>
-
+						<div class="panel panel-default info_panel">
+						  <div class="panel-heading">
+						  	<span class='title_name'>Account Details</span>
+						  </div>
+						  <div class="panel-body user_details">
+						  	<span class='info_title'>First Name:</span>
+							<span class='info_details' id='teacherFirstName'></span>
+							<br>
+							<span class='info_title'>Last Name:</span>
+							<span class='info_details' id='teacherLastName'>  </span>
+							<br>
+						    <span class='info_title'>Password </span>
+							<span class='info_details' id='teacherPassword'></span>
+						 </div>
+						</div>
 						<div class="panel panel-default info_panel">
 						  <div class="panel-heading">
 						  	<span class='title_name'>Contact Details</span>
@@ -64,17 +76,9 @@
 							<span class='info_details' id='teacherGender'></span>
 						  </div>
 						</div>
-						<div class="panel panel-default info_panel">
-						  <div class="panel-heading">
-						  	<span class='title_name'>Account Details</span>
-						  </div>
-						  <div class="panel-body user_details">
-						    <span class='info_title'>Password </span>
-							<span class='info_details' id='teacherPassword'></span>
-						</div>	
-					</div>
-					<div class= 'col col-md-2'>
-						<input type='submit' value = 'Confirm Edit' class='btn btn-primary'>
+						<div class='text-center'>
+							<input type='submit' value = 'Confirm Edit' class='btn btn-primary'>
+						</div>
 					</div>
 				</form>
 			</div>	
@@ -94,11 +98,11 @@ function getTeacherDetails(){
 		$.each(data, function(key, data){
 			if(data._id.$oid == teacherId){
 				$('#teacherFirstName').append(
-					"<input class = 'form-control' placeholder = 'First Name' style = 'margin-right:10px' id = 'firstName' type = 'text' value = "+data.FirstName+" required>"
+					"<input class = 'form-control' placeholder = 'Last Name' id = 'firstName' type = 'text' value = '"+data.FirstName+"' required>"
 				);
 
 				$('#teacherLastName').append(
-					"<input class = 'form-control' placeholder = 'Last Name' style = 'margin-right:10px' id = 'lastName' type = 'text' value = "+data.LastName+" required>"
+					"<input class = 'form-control' placeholder = 'Last Name' id = 'lastName' type = 'text' value = '"+data.LastName+"' required>"
 				);
 				$('#teacherEmail').append("<input placeholder = 'Email' id = 'email' class = 'form-control' type='email' value="+data.Email+" required>");
 				$('#teacherNumber').append("<input placeholder = 'Contact Number' id = 'contactNumber' class = 'form-control' type = 'number' pattern=[0-9]{11} title='11 digits' value = "+data.ContactNumber+" required>");
@@ -118,7 +122,9 @@ function getTeacherDetails(){
 								"</select>"
 					);
 				}
-				$('#teacherPassword').append("<input class = 'form-control' type = 'text' id = 'password' value = "+data.Password+" autocomplete='off' required>");
+				$('#teacherPassword').append(
+					"<input class = 'form-control' type = 'text' id = 'password' value = "+data.Password+" autocomplete='off' required>"
+				);
 			}
 		});
 
@@ -130,7 +136,7 @@ $(document).ready(function(){
 	$("#editAccount").on('submit', function(e){
 		e.preventDefault();
 		var firstName = $('#firstName').val();
-		var lastName = $('#lastName').val().replace(/\n/g, "<br/>");
+		var lastName = $('#lastName').val();
 		var email = $('#email').val();
 		var contactNumber = $('#contactNumber').val();
 		var birthdate = $('#birthdate').val();
