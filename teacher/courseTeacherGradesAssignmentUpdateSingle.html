@@ -1,0 +1,19 @@
+<script src="../bootstrap/js/jquery.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+var assId = getUrlVars()["assId"];
+
+alert("Updated!");
+window.location.href = "courseTeacherGradesAssignmentAddSingle.html?assId="+assId+"&&teacherId="+teacherId+"&&courseId="+courseId;
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+
+</script>

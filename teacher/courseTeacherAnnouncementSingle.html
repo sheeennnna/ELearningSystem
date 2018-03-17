@@ -1,0 +1,198 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload = 'viewAnnouncementSingle(); getTeacherCourseId(); getCourseDetails(); getTeacherName();'>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id='navTeacher'>
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Announcements</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-8 announcement_teacher' style='padding-left:50px'> 
+			<div class="panel panel-primary">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading" style='padding-bottom:30px'></div>
+			  <div class="panel-body">
+			    <table class="table table_announcement">
+				    <tbody id='announcement'>
+					    
+				    </tbody>
+			  	</table>
+			  	<br>
+			  	<div style='height:35%; overflow-y: scroll;' id='announcementContent'>
+			  		
+			  	</div>
+			  </div>
+			  <div class="col-md-offset-9" style='margin-bottom:20px' id='editAnnouncement'>
+					
+			  </div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+var announceId = getUrlVars()["announceId"];
+var teacherName;
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+
+function getTeacherName(){
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/teacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == teacherId){
+				teacherName = data.FirstName + " " +data.LastName;
+			}
+		});
+	});
+}
+
+function editAnnouncements(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/announcementTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == announceId){
+				$('#announcementTitle').val(data.announcementTitle);
+				$('#announcementContent').val(data.announcementContent.replace(/\s?(<br\s?\/?>)\s?/g, "\r\n"));
+			}
+		});
+	});
+}
+
+function viewAnnouncementSingle(){
+	//console.log(assId);
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/announcementTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		//alert(assId);
+		$.each(data, function(key, data){
+			if(data._id.$oid == announceId){
+				$('#announcement').append(
+				"<tr>"+
+			      "<td class='col-md-1'>"+
+		      		"<img class='announcement_icon' src='../images/person_icon.png'>"+
+		      	  "</td>"+
+			      "<td class='col-md-9'>"+
+		        	"<p class='announcement_header_single'>"+data.announcementTitle+"</p>"+
+		        	"<a href='courseTeacherProfile.html?teacherId="+data.announcementTeacherId+"'>"+data.announcementTeacher+"</a>"+
+		        	"<p>"+data.announcementDate+"</p>"+
+		          "</td>"+
+			    "</tr>"
+
+				);
+				$('#announcementContent').append("<p style='text-align:justify'>"+data.announcementContent.replace(/\n/g, "<br />")+"</p>");
+				$('#editAnnouncement').append(
+					"<a href='courseTeacherEditAnnouncement.html?announceId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+						"<button type='button' class='btn btn-primary'>Edit Announcement</button>"+
+					"</a>"
+				);
+			}
+		});
+	});
+}
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

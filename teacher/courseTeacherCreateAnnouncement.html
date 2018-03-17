@@ -1,0 +1,210 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload ='getTeacherCourseId(); getCourseDetails(); getTeacherName();'>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Announcements</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-10' style='padding-left:50px'> 
+			<div class="panel panel-primary">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading assignment_heading">
+			  	<span class='glyphicon glyphicon-file'></span> Create Announcement
+			  </div>
+			  <div class="panel-body">
+			  	<form id='addAnnouncement'>
+			  		<div class="col-md-11">
+			  			<div class="input-group">
+					  		<span class="input-group-addon">
+							        <b>Title</b>
+							      </span>
+						      <input type="text" class="form-control" id = 'announcementTitle' placeholder="Assignment Title" required>
+			    		</div>
+
+			    		<br>
+			    		<!--<p>*Insert here kadtong textarea with the formating options nga very laysho but textbox lang usa:*</p>-->
+			    		<div class="form-group">
+    						<label for="exampleFormControlTextarea1">Content</label>
+	    					<textarea class="form-control" id="announcementContent" placeholder="Assignment Content" rows="15" required></textarea>
+	    						
+	    					</textarea>
+  						</div>
+
+			    		<div class="col-md-offset-9" id='announcementButtons'>
+			    		</div>
+			  		</div>
+			  	</form>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+var announceId = getUrlVars()["announceId"];
+var teacherName;
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+
+function getTeacherName(){
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/teacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == teacherId){
+				teacherName = data.FirstName + " " +data.LastName;
+			}
+		});
+	});
+
+	$("#announcementButtons").append(
+		"<input type='submit' id='submit' value='Create' class='btn btn-primary'/>"+
+		"<a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"<button type='button' class='btn' style='margin-left:10px'>Discard</button>"+
+		"</a>"
+	);
+}
+
+$(document).ready(function(){
+	$("#addAnnouncement").on('submit', function(e){
+		e.preventDefault();
+		var d = new Date();
+	    var month = d.getMonth()+1;
+	    var day = d.getDate();
+
+	    var announceDate = d.getFullYear() + '-' +
+	        (month<10 ? '0' : '') + month + '-' +
+	        (day<10 ? '0' : '') + day;
+
+		var announceContent = $('#announcementContent').val();
+		var announceTitle = $('#announcementTitle').val();
+
+		console.log(announceDate + announceContent + announceTitle);
+
+		//ajax
+		$.ajax({url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/announcementTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+		  data: JSON.stringify({ 
+			  	"announcementTitle": announceTitle,
+			  	"announcementContent": announceContent,
+			  	"announcementDate": announceDate,
+			  	"announcementTeacher": teacherName,
+			  	"announcementTeacherId": teacherId,
+			  	"announcementCourseId": courseId
+
+		  }),
+		  type: "POST",
+		  contentType: "application/json",
+		  success: function(data){
+		  		alert('Announcement "' + announceTitle + '" has been created.');
+		  		window.location.href = "courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId;
+		  },
+		  error: function(xhr, status, err){
+		  		console.log(err);
+		  }
+		});
+	});
+});
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

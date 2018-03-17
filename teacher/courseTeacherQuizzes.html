@@ -1,0 +1,304 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload="getQuizzes(); deleteQuizzes(); getTeacherCourseId(); getCourseDetails()">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Quizzes</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-10' style='padding-left:50px'> 
+			<div class="panel panel-primary">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading assignment_heading">
+			  	<span class='glyphicon glyphicon-file'></span> Quizzes
+			  </div>
+			  <div class="panel-body">
+			  		<span id='createQuiz'>
+			  			
+		   			</span>
+			   <br><br>
+			  	<div id="quizUndated"> 
+				    <ul class="list-group" style='height:25%; overflow-y: scroll;' id='undated'></ul>  	
+			  	</div>
+			  	<div id="quizDated"> 
+				    <ul class="list-group" style='height:25%; overflow-y: scroll;' id="dated"></ul>  	
+			  	</div>
+			  </div>
+			</div>
+		</div>
+</body>
+</html>
+
+<script>
+var quizId = getUrlVars()["quizId"];
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+$(document).ready(function(){
+	$('body').on('click', '#editQuiz', function(e){
+		e.preventDefault();
+		//sets the id so that d will be passed sa url later
+		sessionStorage.setItem('currentQuizId', $(this).data('id'));
+
+		$('#quizTitle').val($(this).data('title'));
+		$('#quizInstructions').val($(this).data('instructions'));
+		$('#quizTimeLimit').val($(this).data('timelimit'));
+		$('#quizDueDate').val($(this).data('duedate'));
+	});
+
+	$("#editQuiz").on('submit', function(e){
+		e.preventDefault();
+
+		//gets the id
+		var qid = sessionStorage.getItem('currentQuizId');
+		console.log(qid);
+
+		var title = $('#quizTitle').val();
+		var instructions = $('#quizInstructions').val();
+		var limit = $('#quizTimeLimit').val();
+		var date = $('#quizDueDate').val();
+		var until = $('#quizTime').val();
+		
+		console.log(title);
+		console.log(date);
+		console.log(instructions);
+		console.log(limit);
+		console.log(until);
+
+		$.ajax({ 
+			url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizTeacher/"+qid+"?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+			data: JSON.stringify( { 
+				"QuizTitle": title,
+				"QuizInstructions": instructions,
+				"QuizTimeLimit": limit,
+				"QuizDueDate": date,
+				"QuizUntil": until
+			}),
+		  	type: "PUT",
+		  	contentType: "application/json",
+		  	success: function(data){
+		  		alert('Quiz ' + data.title + 'has been edited');
+		  	},
+		  	error:function(xhr, status, err){
+		  		console.log(err);
+		  	}
+		});
+	});
+});
+
+function getQuizzes(){
+	// var options = "<div class='col-md-1'><div class='btn-group' role='group'><button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'><span class='glyphicon glyphicon-cog pull-right'></span></button><ul class='dropdown-menu'><li><a href='courseTeacherEditQuiz.html'>Edit</a></li><li><a href='#' data-toggle='modal' data-target='#modalDelete'> Delete</a></li><li><a href='#'>Close</a></li></ul></div></div>";
+	var undatedCtr=0;
+	var datedCtr=0;
+
+
+	$.ajax({ url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		
+		//Counting Data of Undated List and Dated List
+		$.each(data, function(key, data){
+			if(data.QuizDueDate == "No Due Date"){
+				undatedCtr++;
+			}else{
+				datedCtr++;
+			}
+		});
+
+
+		//Undated List
+		$('#quizUndated #undated').append("<li class='list-group-item'><b><span class='glyphicon glyphicon-play'></span> Undated Quizzes</b></li>");
+		$('#quizDated #dated').append("<li class='list-group-item'><b><span class='glyphicon glyphicon-play'></span> Dated Quizzes</b></li>");
+		
+		if(undatedCtr > 0){
+			$.each(data, function(key, data){
+				if(data.QuizDueDate == "No Due Date"){
+					$('#quizUndated #undated').append("<li class='list-group-item'>"+
+							"<div class='row'>"+
+								"<div class='col-md-1'>"+
+									"<h4><span class='glyphicon glyphicon-edit pull-right'></span></h4>"+
+								"</div>"+
+
+								"<div class='col-md-10'>"+
+									"<a href='courseTeacherQuizSingle.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'><h4>"+data.QuizTitle+"</h4></a>"+
+										"<b>Due</b> No Due Date | -0/100pts | 0 Question/s"+
+								"</div>"+
+								"<div class='col-md-1'>"+
+									"<div class='btn-group' role='group'>"+
+							    		"<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+							      		"<span class='glyphicon glyphicon-cog pull-right'></span></button>"+
+										"<ul class='dropdown-menu'>"+
+										    "<li><a href='courseTeacherEditQuiz.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>Edit</a></li>"+
+										    "<li><a href='courseTeacherQuizzes.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'> Delete</a></li>"+
+										"</ul>"+
+							  		"</div>"+
+								"</div>"+
+							"</div>"+
+						 "</li>");
+				}
+			});
+		}else{
+			$('#quizUndated #undated').append("<li class='list-group-item'>No Data to Show</li>");
+		}
+
+		if(datedCtr > 0){
+			$.each(data, function(key, data){
+				if(data.QuizDueDate != "No Due Date"){
+					$('#quizDated #dated').append("<li class='list-group-item'>"+
+							"<div class='row'>"+
+								"<div class='col-md-1'>"+
+									"<h4><span class='glyphicon glyphicon-edit pull-right'></span></h4>"+
+								"</div>"+
+
+								"<div class='col-md-10'>"+
+									"<a href='courseTeacherQuizSingle.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'><h4>"+data.QuizTitle+"</h4></a>"+
+										"<b>Due</b> "+data.QuizDueDate+" | -0/100pts | 0 Question/s"+
+								"</div>"+
+								"<div class='col-md-1'>"+
+									"<div class='btn-group' role='group'>"+
+							    		"<button type='button' class='btn btn-default dropdown-toggle' data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'>"+
+							      		"<span class='glyphicon glyphicon-cog pull-right'></span></button>"+
+										"<ul class='dropdown-menu'>"+
+										   "<li><a href='courseTeacherEditQuiz.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>Edit</a></li>"+
+										    "<li><a href='courseTeacherQuizzes.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'> Delete</a></li>"+
+										"</ul>"+
+							  		"</div>"+
+								"</div>"+
+							"</div>"+
+						 "</li>");
+				}
+			});
+		}else{
+			$('#quizDated ul').append("<li class='list-group-item'>No Data to Show</li>");
+		}
+	});
+}
+
+function deleteQuizzes(){
+	var url = "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizTeacher/"+quizId+"?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju";
+	$.ajax({
+	  url: url,
+	  type: 'DELETE',
+	  async: true,
+	  timeout: 3000,
+	  success: function(data){
+	  		alert('Deleted.');
+	  		window.location.href = "courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId;
+	  },
+	  error: function(xhr, status, err){
+	  		console.log(err);
+	  }
+	});
+	console.log(quizId);
+};
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+
+	$("#createQuiz").append(
+		"<a href='courseTeacherCreateQuiz.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"<button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-pencil'></span> Create Quiz</button>"+
+		"</a>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+
+function createQuiz(){
+	$('#create').append("<a href='courseTeacherCreateQuiz.html?teacherId="+tid+"&&courseId="+cid+"'><button type='button' class='btn btn-primary'><span class='glyphicon glyphicon-pencil'></span> Create Quiz</button></a>");
+}
+</script>

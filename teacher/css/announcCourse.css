@@ -27,13 +27,13 @@
 }
 
 .body_section .announcement_icon{
-	width:80px;
-	height:80px;
+	width:90px;
+	height:90px;
 }
 
 .body_section .announcement_header{
 	font-family: robotoFont;
-	font-size:30px;
+	font-size:25px;
 	font-weight: bold;
 	color:#4f93ff;
 }

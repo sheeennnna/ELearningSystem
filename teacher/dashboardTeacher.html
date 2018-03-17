@@ -1,0 +1,152 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/dashboardCSSTeacher.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload = "getCourses(); getTeacherId();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+				
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>Dashboard</h3>
+					<hr line> 
+				</div>
+			</div>
+
+			<div class="row" style='margin:20px; height:65%; overflow-y: scroll;' id='courses'>
+				
+			</div>
+
+		</div>
+		<center>
+		<div class="col col-sm-3 col-sm-offset-4">
+	      <div class="caption">
+	        <h5 class='text-center'> Interested in teaching another course?</h5>
+	        <p class='text-center' id = 'startNewCourse'>
+	        	
+	        </p>
+	      </div>
+		</div>
+		</center>
+	</div>
+</body>
+
+</html>
+
+<script>
+function getCourses(){
+	var teacherId = getUrlVars()["teacherId"];
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		var numCourses = 0;
+		$.each(data, function(key, data){
+			numCourses++;
+		});
+
+		if(numCourses > 0){
+			var flagTeacher;
+			$.each(data, function(key, data){
+				if(teacherId == data.teacherId){
+					var sched = [];
+					for(var i =0; i<data.courseSchedule.length; i++){
+						if(data.courseSchedule[i] == "Monday"){
+							sched.push("M");
+						}else if(data.courseSchedule[i] == "Tuesday"){
+							sched.push("T");
+						}else if(data.courseSchedule[i] == "Wednesday"){
+							sched.push("W");
+						}else if(data.courseSchedule[i] == "Thursday"){
+							sched.push("Th");
+						}else if(data.courseSchedule[i] == "Friday"){
+							sched.push("F");
+						}else if(data.courseSchedule[i] == "Saturday"){
+							sched.push("Sat");
+						}else if(data.courseSchedule[i] == "Sunday"){
+							sched.push("Sun");
+						}
+					}
+					$('#courses').append(
+						"<div class='col col-sm-3'>"+
+						    "<div class='thumbnail'>"+
+						      "<div class='caption'>"+
+						      	"<div class='text-center'><span class='glyphicon glyphicon-dashboard' style='font-size:60px;color:#337ab7'></span></div>"+
+						        "<h4 style='color:#337ab7;font-weight:bold;'>"+data.courseTitle+"</h4>"+
+						        "<p id='dashboardDetails' style='margin-top:-5px;'><b>Time: </b> "+data.courseStartTime+" - "+data.courseEndTime+"</p>"+
+						        "<p id='dashboardDetails' style='margin-top:-10px;'><b>Schedule: </b> "+sched+"</p>"+
+						        "<p>"+
+						        	"<center>"+
+						        		"<a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+data._id.$oid+"' class='btn btn-primary' role='button'>Open Course</a>"+
+						        	"</center>"+
+						        "</p>"+
+						      "</div>"+
+						    "</div>"+
+						"</div>"
+					);
+					flagTeacher = 1;
+				}else{
+					flagTeacher = 0
+				}
+			});
+		}else{
+			$('#courses').append("<i>No Data to Show</i>");
+		}
+
+		if(flagTeacher == 0){
+			$('#courses').append("<i>No Data to Show</i>");
+		}
+
+		$("#startNewCourse").append("<a href='dashboardTeacherStartNewCourse.html?teacherId="+teacherId+"' class='btn btn-default' role='button'>Start New Course</a>")
+	});
+}
+function getTeacherId(){
+	var teacherId = getUrlVars()["teacherId"];
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+
+</script>

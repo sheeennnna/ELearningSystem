@@ -1,0 +1,138 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/dashboardCSSTeacher.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="../css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload = "getTeacherDetails(); getTeacherId();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+				
+			</ul>
+			<br><br>
+		</div>
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>Account</h3>
+					<hr line> 
+				</div>
+			</div>
+			<div class='row'>
+				<div class='col col-md-3'>
+					<img class='profile_icon' src='../images/person_icon.png'>
+				</div>
+				<div class='col col-md-7'>
+					<p class='announcement_header' id='teacherName'>  </p>
+					
+					<div class="panel panel-default info_panel">
+					  <div class="panel-heading">
+					  	<span class='title_name'>Contact Details</span>
+					  </div>
+					  <div class="panel-body user_details">
+					    <span class='info_title'> E-mail Address: </span>
+						<span class='info_details' id='teacherEmail'></span>
+						<br>
+						<span class='info_title'> Mobile Number: </span>
+						<span class='info_details' id='teacherNumber'></span>
+						<br>						
+					  </div>
+					</div>
+					
+					<div class="panel panel-default info_panel">
+					  <div class="panel-heading">
+					  	<span class='title_name'>Biography Details</span>
+					  </div>
+					  <div class="panel-body user_details">
+					    <span class='info_title'>Birthday: </span>
+						<span class='info_details' id='teacherBirthday'></span>
+						<br>
+						<span class='info_title'>Gender: </span>
+						<span class='info_details' id='teacherGender'></span>
+					  </div>
+					</div>	
+				</div>
+				<div class= 'col col-md-2' id = 'editProfile'>
+					
+				</div>
+			</div>	
+		</div>
+	</div>
+</body>
+
+</html>
+
+<script>
+function getTeacherDetails(){
+	var teacherId = getUrlVars()["teacherId"];
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/teacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == teacherId){
+				$('#teacherName').append(data.FirstName + " " + data.LastName);
+				$('#teacherEmail').append(data.Email);
+				$('#teacherNumber').append(data.ContactNumber);
+				$('#teacherBirthday').append(data.Birthday);
+				$('#teacherGender').append(data.Gender);
+
+			}
+		});
+
+		console.log(data);
+	});
+}
+function getTeacherId(){
+	var teacherId = getUrlVars()["teacherId"];
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#editProfile").append(
+		"<a href='courseTeacherEditProfile.html?teacherId="+teacherId+"'>"+
+			"<button type='button' class='btn btn-primary'>"+
+				"<span class='glyphicon glyphicon-edit'></span> Edit Account"+
+			"</button>"+
+		"</a>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

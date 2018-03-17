@@ -1,0 +1,245 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload = 'teacherAssignmentGrades(); teacherQuizzesGrades(); getTeacherCourseId(); getCourseDetails();'>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Grades</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-9' style='padding-left:50px'> 
+			
+			 <h2>Grades for <span id='gradeCourseName'></span></h2>
+			<hr>
+			<div class="col-md-6" style='padding-left:50px;height:60%; overflow-y: scroll;'>
+				<h4><span class="glyphicon glyphicon-triangle-right"></span> Assignments</h4>	
+				<table class="table table_announcement">
+					<thead>
+						<th>Title</th>
+						<th>Due</th>
+						<th>Add Grades</th>
+						<th></th>
+					</thead>
+					<tbody id = 'teacherAssGrades'>
+						
+					</tbody>
+				</table>
+			</div>
+
+			<div class="col-md-6" style='padding-left:50px;height:60%; overflow-y: scroll;'>
+				<h4><span class="glyphicon glyphicon-triangle-right"></span> Quizzes</h4>		
+				<table class="table table_announcement">
+					<thead>
+						<th>Title</th>
+						<th>Due</th>
+						<th>Add Grades</th>
+						<th></th>
+					</thead>
+					<tbody id = 'teacherQuizzesGrades'>
+					</tbody>
+				</table>
+			</div>
+		</div>
+</body>
+
+</html>
+
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+				$('#gradeCourseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+function teacherAssignmentGrades(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/assignmentTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		var flag;
+		$.each(data, function(key, data){
+			if(data.teacherId == teacherId && data.courseId == courseId){
+				$('#teacherAssGrades').append(
+					"<tr>"+
+						"<td><a href='courseTeacherAssignmentSingle.html?assId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+data.assignmentTitle+"</a></td>"+
+						"<td>"+data.assignmentDate+" at "+data.assignmentTime+"</td>"+
+						"<td class='text-center'>"+
+							"<a href='courseTeacherGradesAssignmentAddSingle.html?assId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+								"<button class='btn btn-default'><span class='glyphicon glyphicon-plus'></span></button>"+
+							"</a>"+
+						"</td>"+
+						"<td>"+
+							"<a href='courseTeacherAssignmentGradesSingle.html?assId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+								"<button class='btn btn-primary'><span class='glyphicon glyphicon-eye-open'></span></button>"+
+							"</a>"+
+						"</td>"+
+					"</tr>"	
+				);
+				flag = 1;
+			}else{
+				flag = 0;
+			}
+		});
+		if(flag == 0){
+			$('#teacherAssGrades').append(
+				"<tr>"+
+					"<td>No data to show.</td>"+
+				"</tr>"	
+			);
+		}
+		// 	$('#teacherAssGrades').append(
+		// 		"<tr>"+
+		// 			"<td>No data to show.</td>"+
+		// 		"</tr>"	
+		// 	);
+		// }
+	});
+}
+
+function teacherQuizzesGrades(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		var flag;
+			$.each(data, function(key, data){
+				if(data.QuizTeacherID == teacherId && data.QuizCourseID == courseId){
+					$('#teacherQuizzesGrades').append(
+						"<tr>"+
+							"<td><a href='courseTeacherQuizSingle.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+data.QuizTitle+"</a></td>"+
+							"<td>"+data.QuizDueDate+"</td>"+
+							"<td class='text-center'>"+
+								"<a href='courseTeacherGradesQuizAddSingle.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+									"<button class='btn btn-default'><span class='glyphicon glyphicon-plus'></span></button>"+
+								"</a>"+
+							"</td>"+
+							"<td>"+
+								"<a href='courseTeacherQuizGradesSingle.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+									"<button class='btn btn-primary'><span class='glyphicon glyphicon-eye-open'></span></button>"+
+								"</a>"+
+							"</td>"+
+						"</tr>"	
+					)
+					flag = 1;
+				}else{
+					flag = 0;
+				}
+
+			});
+		
+
+		if(flag == 0){
+			$('#teacherQuizzesGrades').append(
+				"<tr>"+
+					"<td>No data to show.</td>"+
+				"</tr>"	
+			);
+		}
+	});
+}
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+
+	$("#quizButtons").append(
+		"<input type='submit' id='submit' value='Proceed to Questions' class='btn btn-primary' />"+
+		"<a href='courseTeacherQuizzes.php?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"<button type='button' style='margin-left:10px'  class='btn'>Cancel</button>"+
+		"</a>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

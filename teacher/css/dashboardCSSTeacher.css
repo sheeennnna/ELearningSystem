@@ -84,3 +84,30 @@ body {
 #pad{
 	padding:20px;
 }
+
+.profile_details{
+	font-size: 0.95em;
+}
+
+.title_name{
+	font-family: robotoFont;
+	font-size: 20px;
+}
+
+.info_title{
+	font-weight: bold;
+}
+
+.user_details{
+	font-size:15px;
+}
+
+.body_section .profile_icon{
+	margin:35px;
+	width:260px;
+	height:260px;
+}
+
+#dashboardDetails{
+	font-size: 0.9em;
+}

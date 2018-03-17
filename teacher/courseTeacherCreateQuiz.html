@@ -1,0 +1,238 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+
+	<style>
+		#tof, #mc{
+			display: none;
+		} 
+	</style>
+</head>
+<body onload = "getTeacherCourseId(); getCourseDetails();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Quizzes</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-10' style='padding-left:50px; overflow-y: scroll; height:560px;'> 
+			<div class="panel panel-primary">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading assignment_heading">
+			  	<span class='glyphicon glyphicon-file'></span> Create Quiz
+			  </div>
+			  <div class="panel-body">
+			  		<div class="col-md-11">
+			  			<h4>Details</h4><hr>
+			  		<form id="addQuiz">
+			  			<div class="input-group">
+					  		<span class="input-group-addon">
+						        <b>Title</b>
+						      </span>
+						      <input type="text" class="form-control" id="quizTitle" required>
+			    		</div>
+			    		<br>
+			    		<b>Quiz Instructions</b>
+			    		<textarea class="form-control" id="quizInstructions" required></textarea>
+			    		<br>
+			    		<div class="row">
+			    			<div class="col-md-4">
+			    				<div class="input-group">
+						  			<span class="input-group-addon">
+							        	<b>Time Limit</b>
+							     	</span>
+						      		<input type="text" class="form-control" placeholder="Minutes" id="quizTimeLimit" pattern="(0?[1-5][5-9])" title="From 15-59 minutes only" required>
+			    				</div>
+			    			</div>
+				    		<div class="col-md-4">
+	                			<div class='input-group date'>
+	                				<span class="input-group-addon">
+	                					<b>Due Date</b>
+	                    			</span>
+	                   				<input type='date' class="form-control" id="quizDueDate" />
+	               			 	</div>
+	               			 	<br>
+	           				</div>
+	           				<div class="col-md-4">
+	                			<div class='input-group date'>
+	                				<span class="input-group-addon">
+	                					<b>Until</b>
+	                    			</span>
+	                   				<input type='time' class="form-control" id="quizTime" />
+	               			 	</div>
+	               			 	<br>
+	           				</div>
+			    		</div>
+
+			    		<!-- CREATION?CANCELATION BUTTON -->
+  						<div class="col-md-11" id = 'quizButtons'>
+			    			
+			    		</div>
+			    	</form>
+			  		</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+
+</html>
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+$(document).ready(function(){
+	$("#addQuiz").on('submit', function(e){
+		e.preventDefault();
+
+		var title = $('#quizTitle').val();
+		var instructions = $('#quizInstructions').val();
+		var limit = $('#quizTimeLimit').val();
+
+		if($('#quizDueDate').val() == ""){
+			date = "No Due Date";
+		}else{
+			date = $('#quizDueDate').val();
+		}
+
+		if($('#quizTime').val() == ""){
+			until = "No Time";
+		}else{
+			until = $('#quizTime').val();
+		}
+		
+		console.log(title);
+		console.log(date);
+		console.log(instructions);
+		console.log(limit);
+		console.log(until);
+
+		$.ajax({ 
+			url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+			data: JSON.stringify( {
+				"QuizTeacherID": teacherId,
+				"QuizCourseID": courseId, 
+				"QuizTitle": title,
+				"QuizInstructions": instructions,
+				"QuizTimeLimit": limit,
+				"QuizDueDate": date,
+				"QuizUntil": until,
+			}),
+		  	type: "POST",
+		  	contentType: "application/json",
+		  	success: function(data){
+		  		alert('Quiz Details Successfully Added');
+		  		window.location.href = "courseTeacherCreateQuizQuestions.html?quizId="+data._id.$oid+"&&teacherId="+teacherId+"&&courseId="+courseId;
+		  	},
+		  	error:function(xhr, status, err){
+		  		console.log(err);
+		  	}
+		});
+	});
+});
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+
+	$("#quizButtons").append(
+		"<input type='submit' id='submit' value='Proceed to Questions' class='btn btn-primary' />"+
+		"<a href='courseTeacherQuizzes.php?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"<button type='button' style='margin-left:10px'  class='btn'>Cancel</button>"+
+		"</a>"
+	);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

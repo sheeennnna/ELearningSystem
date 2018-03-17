@@ -1,0 +1,239 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/dashboardCSSTeacher.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+</head>
+<body onload = "getTeacherId();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+				
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>Dashboard</h3>
+					<hr line> 
+				</div>
+				<div>
+				</div>
+			</div>
+		</div>
+		<div class="row">
+			<div class="col col-sm-6 col-sm-offset-2">
+				<form id = 'addCourse'>
+			    <div class="panel panel-primary">
+	  			<!-- Default panel contents -->
+	  				<div class="panel-heading assignment_heading">
+	  					Start New Course
+				  	</div>
+		  			<div class="panel-body">
+             		<form id="dashboardTeacherStartNewCourse" autocomplete="off">
+				      		<label for="sel1">Select list:</label>
+				      		<div class="radio">
+							  <label><input type="radio" name="type" id = 't1' value = 'English' onClick = 'type1();'>English</label> 
+							  <label><input type="radio" name="type" id = 't2' value = 'Math' onClick = 'type2();'>Math</label>
+							  <label><input type="radio" name="type" id = 't3' value = 'Science' onClick = 'type3();'>Science</label>
+							</div>
+							<select class="form-control" id="courseTitle" required>
+							  
+							</select> 	
+	    				<br>
+	    				<div class="row">
+	    					<div class="col col-sm-6 ">
+	    						<div class="input-group">
+					  				<span class="input-group-addon">
+				        				<b>Start Time</b>
+				      				</span>
+						      		<input type="time" class="form-control" id="courseStartTime" required>
+	    						</div>
+	    					</div>
+	 						<div class="col col-sm-6 ">
+		    					<div class="input-group">
+					  				<span class="input-group-addon">
+				        				<b>End Time</b>
+				      				</span>
+						      		<input type="time" class="form-control" id="courseEndTime" required>
+		    					</div>
+	    					</div>
+	    				</div>
+	    				<br>
+	    					<label>Schedule</label>
+	    					<br>
+	    					<div id = 'courseSchedule'>
+	    					<label class="checkbox-inline"><input type="checkbox" value = 'Sunday' name = 'courseSched'>Sunday</label>
+	    					<label class="checkbox-inline"><input type="checkbox" value = 'Monday' name = 'courseSched'>Monday</label>
+							<label class="checkbox-inline"><input type="checkbox" value = 'Tuesday' name = 'courseSched'>Tuesday</label>
+							<label class="checkbox-inline"><input type="checkbox" value = 'Wednesday' name = 'courseSched'>Wednesday</label>
+							<label class="checkbox-inline"><input type="checkbox" value = 'Thursday' name = 'courseSched'>Thursday</label>
+							<label class="checkbox-inline"><input type="checkbox" value = 'Friday' name = 'courseSched'>Friday</label>
+							<label class="checkbox-inline"><input type="checkbox" value = 'Saturday' name = 'courseSched'>Saturday</label>
+	    				<br>
+	    				<br>
+	    			</form>
+					</div>
+					<div class="panel-footer text-center">
+						<input type="submit" value="Create Course" name="createCourseBtn" class="btn btn-primary">
+						<a href="dashboardTeacher.php" class="btn btn-default" role="button">Cancel</a> 
+					</div>
+				</div>
+				</form>
+			</div>
+		</div>
+
+</body>
+</html>
+<script>
+var teacherId = getUrlVars()["teacherId"];
+var val;
+var teacherName;
+function type1(){
+	var select = document.getElementById("courseTitle");
+	var length = select.options.length;
+	console.log(length);
+	for (var i = 0; i < length; i++) {
+	  select.remove(select.options[i]);
+	}
+	var course = ["English 1", "English 2", "English 3", "English 4", "English 5"];
+
+	for(var i = 0; i < course.length; i++){
+		var option = document.createElement("option");
+		option.text = course[i];
+		var select = document.getElementById("courseTitle");
+		select.appendChild(option);
+	}
+}
+
+function type2(){
+	var select = document.getElementById("courseTitle");
+	var length = select.options.length;
+	console.log(length);
+	for (var i = 0; i < length; i++) {
+	  select.remove(select.options[i]);
+	}
+
+	var course = ["Math 1", "Math 2", "Math 3", "Math 4", "Math 5"];
+
+	for(var i = 0; i < course.length; i++){
+		var option = document.createElement("option");
+		option.text = course[i];
+		var select = document.getElementById("courseTitle");
+		select.appendChild(option);
+	}
+	
+}
+
+function type3(){
+	var select = document.getElementById("courseTitle");
+	var length = select.options.length;
+	console.log(length);
+	for (var i = 0; i < length; i++) {
+	  select.remove(select.options[i]);
+	}
+
+	var course = ["Science 1", "Science 2", "Science 3", "Science 4", "Science 5"];
+
+	for(var i = 0; i < course.length; i++){
+		var option = document.createElement("option");
+		option.text = course[i];
+		var select = document.getElementById("courseTitle");
+		select.appendChild(option);
+	}
+	
+}
+
+$(document).ready(function(){
+	$("#addCourse").on('submit', function(e){
+		e.preventDefault();
+
+		var courseTitle = $('#courseTitle').val();
+		var courseEndDate = $('#courseEndTime').val();
+		var courseStartDate = $('#courseStartTime').val();
+
+		var courseSchedule = new Array();
+
+		$('input[name="courseSched"]:checked').each(function() {
+			courseSchedule.push($(this).val());
+		});
+		console.log(courseSchedule + courseTitle + courseEndDate + courseStartDate + teacherName);
+
+		//ajax
+		$.ajax({url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+		  data: JSON.stringify({ 
+			  	"courseTitle": courseTitle,
+			  	"courseStartTime": courseStartDate,
+			  	"courseEndTime": courseEndDate,
+			  	"courseSchedule": courseSchedule,
+			  	"teacherId": teacherId,
+			  	"teacherName": teacherName
+
+		  }),
+		  type: "POST",
+		  contentType: "application/json",
+		  success: function(data){
+		  		alert('Course "' + courseTitle + '" has been created.');
+		  		window.location.href = "dashboardTeacher.html?teacherId="+teacherId;
+		  },
+		  error: function(xhr, status, err){
+		  		console.log(err);
+		  }
+		});
+	});
+});
+
+
+function getTeacherId(){
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/teacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == teacherId){
+				teacherName = data.FirstName + " " + data.LastName;
+				console.log(teacherName);
+			}
+		});
+	});
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

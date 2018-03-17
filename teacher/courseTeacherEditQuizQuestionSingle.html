@@ -1,0 +1,379 @@
+<html>
+<head>
+	<link rel="icon" href="../images/icon.png">
+	<link rel='stylesheet' href="css/handledCourse.css">
+	<link rel='stylesheet' href="css/announcCourse.css">
+	<link rel='stylesheet' href="css/assignCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Dashboard</title>
+	<style>
+		#tof, #mc, #fitb{
+			display: none;
+		} 
+	</style>
+</head>
+<body onload="getQuestionType(); getTeacherCourseId(); getCourseDetails();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="../images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="navTeacher">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>
+						<h3><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> <span id='courseName'></span>
+						<span class='glyphicon glyphicon-menu-right' style='font-size:20px'></span> 
+						<span class='add_announcement'>Quizzes</span>
+
+					</h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line"></center>
+				</div>
+			</div>
+			<div class='col col-md-1 text-center main_menu_teacher'>
+				<ul class="nav nav-pills nav-stacked" id='navCourse'>
+				</ul>
+				<br><br>
+			</div>
+		<div class='col col-md-10' style='padding-left:50px; height:85%; overflow-y: scroll'> 
+			<div class="panel panel-primary">
+			  <!-- Default panel contents -->
+			  <div class="panel-heading assignment_heading">
+			  	<span class='glyphicon glyphicon-file'></span> Edit Question
+			  </div>
+			  <div class="panel-body">
+			  		<div class="col-md-11">
+			  			<label>Contents</label>
+			  			<form id='editQuestion'>
+				    		<div class="form-group">
+		    						<div class="row"> 
+		    							<div class="col-sm-3">
+		    								<div class='input-group date' id='datetimepicker1'>
+				                				<span class="input-group-addon">
+				                					<b>Pts</b>
+				                    			</span>
+		                   						<input type='text' class="form-control" id="quizPts" />
+		                   					</div>
+		    							</div>
+		    						</div>
+		    						<br>
+		    						<input type="text" name="" id="qtype" hidden>
+		    						<!-- Question Type -->
+		    						<!-- Multiple Choice -->
+		    						<div id="mc">
+			    						<b>Question:</b>
+					    					<textarea class="form-control" id="mcQ"></textarea>
+			    						<br>
+			    						<b>Choices:</b>
+			    						<div class="row">
+			    							<div class="col-sm-3">
+					    						<div class='input-group'>
+							                		<span class="input-group-addon">
+							                			<b>A</b>
+							               			</span>
+					               					<input type='text' class="form-control" id="choiceA" />
+					                   			</div> 
+					                   		</div>
+					                   		<div class="col-sm-3">
+					    						<div class='input-group'>
+							                		<span class="input-group-addon">
+							                			<b>B</b>
+							               			</span>
+					               					<input type='text' class="form-control" id="choiceB" />
+					                   			</div> 
+					                   		</div>
+					                   		<div class="col-sm-3">
+					    						<div class='input-group'>
+							                		<span class="input-group-addon">
+							                			<b>C</b>
+							               			</span>
+					               					<input type='text' class="form-control" id="choiceC" />
+					                   			</div> 
+					                   		</div>
+					                   		<div class="col-sm-3">
+					    						<div class='input-group'>
+							                		<span class="input-group-addon">
+							                			<b>D</b>
+							               			</span>
+					               					<input type='text' class="form-control" id="choiceD" />
+					                   			</div> 
+					                   		</div>
+				                   		</div> 	
+				                   	<b>Answer:</b>
+			    					<div class='input-group date''>
+					               		<span class="input-group-addon">
+					               			<b>Correct Answer</b>
+					           			</span>
+			               				<input type='text' class="form-control" id="quizCorrectMC" />
+			              			</div> <br>                 
+			                   		</div>
+			                   		
+
+		    						<!-- True of False and fill in the blank-->
+		    						<div id="tof">
+			    						<b>Question:</b>
+					    					<textarea class="form-control" id="tofQ"></textarea>
+			    						<br>
+			    						<b>Answer:</b>
+			    						<div class='input-group date''>
+					                		<span class="input-group-addon">
+					                			<b>Correct Answer</b>
+					               			</span>
+			               					<input type='text' class="form-control" id="quizCorrectTof" />
+			                   			</div> <br>
+			                   		</div>
+
+			                   		<div id="fitb">
+			    						<b>Question:</b>
+					    					<textarea class="form-control" id="fitbQ"></textarea>
+			    						<br>
+			    						<b>Answer:</b>
+			    						<div class='input-group date''>
+					                		<span class="input-group-addon">
+					                			<b>Correct Answer</b>
+					               			</span>
+			               					<input type='text' class="form-control" id="quizCorrectFitb" />
+			                   			</div> <br>
+			                   			<div class='input-group date' id='datetimepicker1'>
+					                		<span class="input-group-addon">
+					                			<b>Possible Answer</b>
+					               			</span>
+			               					<input type='text' class="form-control" id="quizPossibleFitb" />
+			                   			</div><br>
+			                   		</div>
+			                   	<div class="col-md-11" id = 'quizButtons'>
+					    			<!-- <input type="submit" id="submit" value="Edit" class="btn btn-primary" />
+					    			<a href="courseTeacherQuizzes.html">
+					    				<button type="button" class="btn">Cancel</button>
+					    			</a> -->
+			    				</div>
+	  						</div>
+	  					</form>
+			  		</div>
+			</div>
+		</div>
+	</div>
+	</div>
+</body>
+</html>
+<script>
+var qid = getUrlVars()["qid"];
+var teacherId = getUrlVars()["teacherId"];
+var courseId = getUrlVars()["courseId"];
+
+function getCourseDetails(){
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(data._id.$oid == courseId && data.teacherId == teacherId){
+				$('#courseName').append(data.courseTitle);
+			}
+		});
+	});
+}
+
+$(document).ready(function(){
+	$("#editQuestion").on('submit', function(e){
+		e.preventDefault();
+
+		var url = "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizQuestions?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju";
+
+		var qpts = $('#quizPts').val();
+		var qtype = $('#qtype').val();
+
+		console.log(qpts);
+		console.log(qtype);
+
+		if(qtype == "Multiple Choice"){
+			var question = $('#mcQ').val();
+			var correct = $('#quizCorrectMC').val();
+			var a = $('#choiceA').val();
+			var b = $('#choiceB').val();
+			var c = $('#choiceC').val();
+			var d = $('#choiceD').val();
+
+			$.ajax({ 
+				url: url,
+				data: JSON.stringify( { 
+					"QuizID": quizId,
+					"QPoints": qpts,
+					"QType": qtype,
+					"Question": question,
+					"Correct": correct,
+					"a": a,
+					"b": b,
+					"c": c,
+					"d": d
+				}),
+			  	type: "PUT",
+			  	contentType: "application/json",
+			  	success: function(data){
+			  		alert('Question successfully edited');
+			  		// window.location.href = "courseTeacherEditQuizQuestions.html?quiId="+data.QuizID;
+			  		console.log(data.QuizID);
+			  	},
+			  	error:function(xhr, status, err){
+			  		console.log(err);
+			  	}
+			});
+		}else if(qtype == "Fill in the Blank"){
+			var question = $('#fitbQ').val();
+			var correct = $('#quizCorrectFitb').val();
+			var possible = $('#quizPossibleFitb').val();
+
+			$.ajax({ 
+				url: url,
+				data: JSON.stringify( { 
+					"QuizID": quizId,
+					"QPoints": qpts,
+					"QType": qtype,
+					"Question": question,
+					"Correct": correct,
+					"Possible": possible
+				}),
+			  	type: "PUT",
+			  	contentType: "application/json",
+			  	success: function(data){
+			  		alert('Question successfully edited');
+			  		window.location.href = "courseTeacherEditQuizQuestions.html?quiId="+data.QuizID;
+			  	},
+			  	error:function(xhr, status, err){
+			  		console.log(err);
+			  	}
+			});
+		}else{
+			var question = $('#tofQ').val();
+			var correct = $('#quizCorrectTof').val();
+
+			$.ajax({ 
+				url: url,
+				data: JSON.stringify( { 
+					"QuizID": quizId,
+					"QPoints": qpts,
+					"QType": qtype,
+					"Question": question,
+					"Correct": correct,
+				}),
+			  	type: "PUT",
+			  	contentType: "application/json",
+			  	success: function(data){
+			  		alert('Question successfully edited');
+			  		window.location.href = "courseTeacherEditQuizQuestions.html?quiId="+data.QuizID;
+			  	},
+			  	error:function(xhr, status, err){
+			  		console.log(err);
+			  	}
+			});
+		}
+	});
+});
+
+
+function getQuestionType(){
+	$.ajax({ url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/quizQuestions?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		
+		$.each(data, function(key, data){
+			$('#quizPts').val(data.QPoints);
+			if(data._id.$oid == qid){
+				if(data.QType == "Multiple Choice"){
+					$('#qtype').val(data.QType);
+					$('#mc').show();
+					$('#mcQ').val(data.Question);
+					$('#choiceA').val(data.a);
+					$('#choiceB').val(data.b);
+					$('#choiceC').val(data.c);
+					$('#choiceD').val(data.d);
+					$('#quizCorrectMC').val(data.Correct);
+				}else if(data.QType == "Fill in the Blank"){
+					$('#qtype').val(data.QType);
+					$('#fitb').show();
+					$('#fitbQ').val(data.Question);
+					$('#quizCorrectFitb').val(data.Correct);
+					$('#quizPossibleFitb').val(data.Correct);
+				}else{
+					$('#qtype').val(data.QType);
+					$('#tof').show();
+					$('#tofQ').val(data.Question);
+					$('#quizCorrectTof').val(data.Correct);
+				}
+			}
+		});
+	});
+}
+
+function getTeacherCourseId(){
+	console.log(courseId);
+	$("#navTeacher").append(
+		"<li><a href='courseTeacherProfile.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-user'></span>"+
+			"</br>Account"+
+		"</a></li>"+
+		"<li><a href='dashboardTeacher.html?teacherId="+teacherId+"' class='active'>"+
+			"<span class='glyphicon glyphicon-th'></span>"+
+			"</br>Dashboard"+
+		"</a></li>"+
+		"<li><a href='teacherHandledCourse.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-book'></span>"+
+			"<br>Handled Courses</br>"+
+		"</a></li>"+
+		"<li><a href='inboxTeacher.html?teacherId="+teacherId+"'>"+
+			"<span class='glyphicon glyphicon-inbox'></span>"+
+			"<br>Inbox</br>"+
+		"</a></li>"+
+		"<br><br><br>"+
+		"<li><a href='../index.html'>"+
+			"<span class='glyphicon glyphicon-log-out'></span>"+
+		"</a></li>"
+	);
+
+	$("#navCourse").append(
+		"<li><a href='courseTeacher.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Home"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAnnouncement.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Announcements"+
+		"</a></li>"+
+		"<li><a href='courseTeacherAssignment.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Assignments"+
+		"</a></li>"+
+		"<li><a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"' class='active'>"+
+			"Quizzes"+
+		"</a></li>"+
+		"<li><a href='courseTeacherGrades.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Grades"+
+		"</a></li>"+
+		"<li><a href='courseTeacherSession.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"Session"+
+		"</a></li>"
+	);
+
+	$("#quizButtons").append(
+		"<input type='submit' id='submit' value='Edit' class='btn btn-primary' />"+
+		"<a href='courseTeacherQuizzes.html?teacherId="+teacherId+"&&courseId="+courseId+"'>"+
+			"<button type='button' style='margin-left:10px'  class='btn'>Cancel</button>"+
+		"</a>"
+	);
+}
+
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>
