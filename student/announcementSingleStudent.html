@@ -1,0 +1,152 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/accountStudentCSS.css">
+	<link rel='stylesheet' href="css/coursesStudentCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Announcement</title>
+</head>
+<body onload="loadSubjectName(); loadSingleAnnouncement(); setStudentPages(); setStudentSideNavBar()">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-11' id='subjectName'></div>
+				<hr class="hr_line">
+			</div>
+
+			<br>
+			<div class='row'>
+				<!-- SIDE MENU -->
+				<div class='col col-md-2 course_side_menu'>
+					<ul class='nav nav-pills nav-stacked' id="student_sideNavBar">
+					</ul>
+				</div>
+				<!-- END OF SIDE MENU -->
+				<!-- BODY -->
+				<div class='col col-md-9'>
+							<div class="panel panel-danger">
+							  <!-- Default panel contents -->
+								  <div class="panel-heading" style="height:110px;">
+									  	<table class="table">
+										    <tbody id="announcement_header">
+											</tbody>
+									  	</table>
+								  </div>
+								  <div class="panel-body">
+								  	<br>
+								  	<div id="announcement_content"></div>
+								  </div>
+							</div>			
+				</div>
+			</div>
+		</div><!-- END OF BODY -->
+	</div>
+</body>
+
+</html>
+<script>
+	var announcementID = getUrlVars()["announcement_id"];
+	var student_ID = getUrlVars()["studentId"];
+	var course_ID = getUrlVars()["courseId"];
+
+	function loadSubjectName() {
+		var subject_name=' ';
+		$.ajax({
+			url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+		}).done(function(data){
+			$.each(data, function(key, data){
+				if(course_ID == data._id.$oid){
+					subject_name = "<h3 class='course_header'><span class='glyphicon glyphicon-menu-hamburger'></span>"+data.courseTitle+"</h3>";
+				}
+			});
+		
+			$('#subjectName').html(subject_name);
+		});
+	}
+
+	function loadSingleAnnouncement() {
+		var output = '';
+		var announcement_body = ' ';
+		$.ajax({
+			url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/announcementTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+		}).done(function(data){
+			$.each(data, function(key, data){
+				if(course_ID == data.announcementCourseId){
+					output += "<tr>";
+					output += "<td class='col col-md-1'><img class='announcement_icon' src='../images/person_icon.png' style='width:75px;height:75px;'></td>";
+					output += "<td class='col-md-9' style='word-wrap:break-word;padding-left:20px;padding-right:20px;'>";
+					output +=	    "<p class='announcement_header' style='font-size:25px;'>" +
+								    	data.announcementTitle +
+								    "</p>" +
+									"<p class='announcer'><a href='../teacher/courseTeacherProfile.html?teacherId="+data.announcementTeacherId+"'>" + data.announcementTeacher + "</a></p>";
+					output += 	"</td>";
+					output += "<td class='col-md-2'> <strong>Date Created:</strong> "+data.announcementDate+"</td>";
+					
+					announcement_body += "<p>"+ data.announcementContent +"</p>";
+				}
+			});
+		
+			$('#announcement_header').html(output);
+			$('#announcement_content').html(announcement_body);
+		});
+	}
+
+	function setStudentPages() {
+				var sNavBar = ' ';
+				
+					sNavBar += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					sNavBar += "<li><a href='dashboardStudent.html?studentId="+student_ID+"' >" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					sNavBar += "<li><a href='coursesStudent.html?studentId="+student_ID+"' class='active'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					sNavBar += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					sNavBar += "<br><br><br>";
+					sNavBar += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+			$('#student_NavBar').html(sNavBar);
+
+	}
+
+	function setStudentSideNavBar() {
+		var sideNav = ' ';
+			sideNav +=  "<li role='presentation'>" +
+							"<a href='coursesStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Home </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation' class='active'>" +
+							"<a href='announcementStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Announcements </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='assignmentStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Assignment </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='courseStudentGrades.html?studentId="+student_ID+"&courseId="+course_ID+"'> Grades </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='courseStudentSession.html?studentId="+student_ID+"&courseId="+course_ID+"'> Session </a>" +
+						"</li>";
+		$('#student_sideNavBar').html(sideNav);
+	}
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}	
+</script>

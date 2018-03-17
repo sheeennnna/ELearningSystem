@@ -1,0 +1,146 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/courseStudentGrades.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Grades</title>
+</head>
+<body onload="setStudentPages(); setStudentSideNavBar(); loadSubjectName(); loadSubjectGrades();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10' id="subjectName"></div>
+				<br><br>
+				<hr class="hr_line">
+			</div>
+			<div class='col col-md-2'>
+				<ul class='nav nav-pills nav-stacked student_sideMenu' id="student_sideNavBar"></ul>
+			</div>
+			
+		<div class='col col-md-9 score_list'> 
+			<div class="dropdown">
+				<button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Arrange by <span class="caret"></span></button>
+				<ul class="dropdown-menu">
+					<li><a href="#">Due date</a></li>
+					<li><a href="#">Assignment Group</a></li>
+					<li><a href="#">Title</a></li>
+				</ul>
+			</div>
+			<div class="container">
+				<table class="table" id="grades_table">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>Due</th>
+							<th>Score</th>
+							<th>Out of</th>
+						</tr>
+					</thead>
+					<tbody id="gradesList">
+				    </tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
+
+<script>
+var student_ID = getUrlVars()["studentId"];
+var course_ID = getUrlVars()["courseId"];
+
+function loadSubjectGrades() {
+	var gradeRow = '<br><p><b>No grades were recorded yet.</b></p>';
+	$.ajax({
+		url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/assignmentScores?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(course_ID == data.courseId){
+				gradeRow = "<tr>";
+				gradeRow += "<td class='td1'>"+ data.assignmentTitle +"</td>";
+				gradeRow += "<td>"+ data.assignmentDue +"</td>";
+				gradeRow += "<td>"+ data.score +"</td>";
+				gradeRow += "<td>"+ data.total +"</td>";
+				gradeRow += "</tr>";
+			}
+		});
+	
+		$('#gradesList').html(gradeRow);
+	});
+}
+
+function loadSubjectName() {
+		var subject_name=' ';
+		$.ajax({
+			url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+		}).done(function(data){
+			$.each(data, function(key, data){
+				if(course_ID == data._id.$oid){
+					subject_name = "<h3 class='course_header'><span class='glyphicon glyphicon-menu-hamburger'></span>"+data.courseTitle+" > Grades</h3>";
+				}
+			});
+		
+			$('#subjectName').html(subject_name);
+		});
+	}
+
+function setStudentPages() {
+				var sNavBar = ' ';
+				
+					sNavBar += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					sNavBar += "<li><a href='dashboardStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					sNavBar += "<li><a href='coursesStudent.html?studentId="+student_ID+"' class='active'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					sNavBar += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					sNavBar += "<br><br><br>";
+					sNavBar += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+			$('#student_NavBar').html(sNavBar);
+
+	}
+
+	function setStudentSideNavBar() {
+		var sideNav = ' ';
+			sideNav +=  "<li role='presentation'>" +
+							"<a href='courseSingleStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Home </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='announcementStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Announcements </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='assignmentStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Assignment </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation' class='active'>" +
+							"<a href='courseStudentGrades.html?studentId="+student_ID+"&courseId="+course_ID+"'> Grades </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='courseStudentSession.html?studentId="+student_ID+"&courseId="+course_ID+"'> Session </a>" +
+						"</li>";
+		$('#student_sideNavBar').html(sideNav);
+	}
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}	
+</script>

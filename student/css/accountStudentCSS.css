@@ -1,8 +1,10 @@
 /*ACCOUNT STYLE*/
 img.profile_picture {
 	padding-top: 10px;
-	height: 200px;
-	width: 300px;
+	padding-left: 20px;
+	padding-right: -5px;
+	height: 250px;
+	width: 250px;
 }
 
 div.username {

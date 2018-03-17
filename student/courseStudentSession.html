@@ -1,0 +1,219 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/sessionCourse.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title> Session </title>
+</head>
+<body onload="setStudentPages(); setStudentSideNavBar(); loadSubjectName();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10' id="subjectName"></div>
+				<hr class="hr_line">
+			</div>
+			<div class='col col-md-2 main_menu_teacher'>
+				<ul class='nav nav-pills nav-stacked' id="student_sideNavBar"></ul>
+				<br><br>
+			</div>
+		
+		<div class='col col-md-9 session_students_list' style='padding-left:50px;height:80%; overflow-y: scroll;'> 
+			<div class='row'>
+				<div class="col-md-offset-3" style='padding-bottom:10px;'>
+					<div class="col-md-7">
+					    <div class="input-group">
+						    <input type="text" class="form-control" placeholder="Search Teacher Name">
+						    <span class="input-group-btn">
+						        <button class="btn btn-default" type="button">Go!</button>
+						    </span>
+					    </div><!-- /input-group -->
+					</div><!--/div col-md-9-->	
+				</div>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Joan Tero</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-fire' style='color:#d9534f'></span> 
+						<b class='stud_status'>Offline</b>
+					</p>
+					<span>
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Daphne Leah Sabang</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-facetime-video' style='color:#4CAF50'></span> 
+						<b class='stud_status'>Active Now</b>
+					</p>
+					<span>
+						<button class="btn btn-success" type="button"><span class='glyphicon glyphicon-facetime-video'></span> Go!</button> 
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Maria Majorie Purino</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-fire' style='color:#d9534f'></span> 
+						<b class='stud_status'>Offline</b>
+					</p>
+					<span>
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Ma. Regina Yoma</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-facetime-video' style='color:#4CAF50'></span> 
+						<b class='stud_status'>Active Now</b>
+					</p>
+					<span>
+						<button class="btn btn-success" type="button"><span class='glyphicon glyphicon-facetime-video'></span> Go!</button> 
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Stephanie Polinar</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-fire' style='color:#d9534f'></span> 
+						<b class='stud_status'>Offline</b>
+					</p>
+					<span>
+						<button class="btn btn-success" type="button"><span class='glyphicon glyphicon-facetime-video'></span> Go!</button> 
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Cindy Velasquez</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-facetime-video' style='color:#4CAF50'></span> 
+						<b class='stud_status'>Active Now</b>
+					</p>
+					<span>
+						<button class="btn btn-success" type="button"><span class='glyphicon glyphicon-facetime-video'></span> Go!</button> 
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+			<div class="col-sm-4" style='padding-top:15px'>
+				<center class='session_student_icon' style='padding:20px;'>
+					<img class='session_student_pic' src='images/avatar.png'>
+					<p class='session_student_name'><a href='courseTeacherViewSession.php'>Anthonette Cantara</a></p>
+					<p class='session_student_status'><span class='glyphicon glyphicon-fire' style='color:#d9534f'></span> 
+						<b class='stud_status'>Offline</b>
+					</p>
+					<span>
+						<a href='courseTeacherViewSession.php'>
+							<button class="btn btn-default" type="button">View Details</button>
+						</a>
+					</span>
+				</cnter>
+			</div>
+		</div>
+	</div>
+
+</body>
+
+</html>
+
+<script>
+var student_ID = getUrlVars()["studentId"];
+var course_ID = getUrlVars()["courseId"];
+
+function loadSubjectName() {
+	var subject_name=' ';
+	$.ajax({
+		url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+	}).done(function(data){
+		$.each(data, function(key, data){
+			if(course_ID == data._id.$oid){
+				subject_name = "<h3 class='course_header'><span class='glyphicon glyphicon-menu-hamburger'></span>"+data.courseTitle+" > Announcements</h3>";
+			}
+		});
+	
+		$('#subjectName').html(subject_name);
+	});
+}
+
+function setStudentPages() {
+		var sNavBar = ' ';
+		
+			sNavBar += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+					  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+			sNavBar += "<li><a href='dashboardStudent.html?studentId="+student_ID+"'>" +
+					  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+			sNavBar += "<li><a href='coursesStudent.html?studentId="+student_ID+"' class='active'>"+
+					  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+			sNavBar += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+					  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+			sNavBar += "<br><br><br>";
+			sNavBar += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+	$('#student_NavBar').html(sNavBar);
+
+}
+
+function setStudentSideNavBar() {
+	var sideNav = ' ';
+		sideNav +=  "<li role='presentation'>" +
+						"<a href='courseSingleStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Home </a>" +
+					"</li>";
+		sideNav +=	"<li role='presentation'>" +
+						"<a href='announcementStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Announcements </a>" +
+					"</li>";
+		sideNav +=	"<li role='presentation'>" +
+						"<a href='assignmentStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Assignment </a>" +
+					"</li>";
+		sideNav +=	"<li role='presentation'>" +
+						"<a href='courseStudentGrades.html?studentId="+student_ID+"&courseId="+course_ID+"'> Grades </a>" +
+					"</li>";
+		sideNav +=	"<li role='presentation'  class='active'>" +
+						"<a href='courseStudentSession.html?studentId="+student_ID+"&courseId="+course_ID+"'> Session </a>" +
+					"</li>";
+	$('#student_sideNavBar').html(sideNav);
+}
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}	
+</script>

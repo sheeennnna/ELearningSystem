@@ -1,0 +1,212 @@
+<html>
+<head>
+	<link rel='icon' href='images/icon.png'>
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/accountStudentCSS.css">
+	<link rel='stylesheet' href="css/enrollPageCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Enrollment</title>
+</head>
+<body onload='setStudentPages(); getCourses()'>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3>Enroll</h3>
+					<hr line> 
+				</div>
+			</div>
+
+			<div class='col col-md-10'>
+					<div class='row'>
+							<div class="col-lg-6" style='padding-bottom:30px'>
+								<div class="col-md-10">
+									<!-- SEARCH-->
+							    	<div class="input-group"  id="searchSection" style="margin-left:50px;">
+									  <span class="input-group-addon" id="basic-addon1"><span class='glyphicon glyphicon-search'></span></span>
+									  <input type="text" class="form-control" placeholder="Search a subject" title="Type in here" 
+									  		 aria-describedby="basic-addon1" id="searchInput" onkeyup="searchFunction()">
+									</div>
+									<!-- END OF SEARCH-->
+							    </div>
+				  			</div>	
+					</div>
+					<div class="row">
+						<div class='col col-md-offset-1'>
+							<table class="table table-striped table_announcement" id="coursesTable" style='table-layout:fixed; width:900px;'>
+								<form method='POST'>
+					    			<tbody id="courses">
+								    	
+						    		</tbody>
+								</form>
+					  		</table>
+						</div>
+					</div>			
+				</div>
+
+		</div>
+
+		<!-- ENROLLMENT SUCCESSFUL MODAL -->
+		<div id='successfullEnroll' class='modal'>
+			<div class="modal-content">
+			    <span class="close">&times;</span>
+			    <p><center><b>Successfully enrolled!</b></center></p>
+			  </div>
+		</div>
+
+	</div>
+</body>
+</html>
+
+<script>
+var student_ID = getUrlVars()["studentId"];
+
+function isCourseEnrolled(courseID){
+	var coursesEnrolled = [];
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/coursesEnrolled?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		var numCourses = 0;
+		
+		//alert("Function getCoursesEnrolled");
+		$.each(data, function(key, data){
+				numCourses++;
+				coursesEnrolled.push(data.courseId);
+		});
+	});
+}
+
+function searchFunction() {
+  var input, filter, table, tr, td, i;
+  input = document.getElementById("searchInput");
+  filter = input.value.toUpperCase();
+  table = document.getElementById("coursesTable");
+  tr = table.getElementsByTagName("tr");
+  for (i = 0; i < tr.length; i++) {
+    td = tr[i].getElementsByTagName("td")[1];
+    if (td) {
+      if (td.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        tr[i].style.display = "";
+      } else {
+        tr[i].style.display = "none";
+      }
+    }       
+  }
+}
+
+function getCourses(){
+	var output = ' ';
+	//ajax
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+
+		var numCourses = 0;
+		$.each(data, function(key, data){
+			numCourses++;
+		});
+
+		//console.log(numCourses);
+
+		if(numCourses > 0){
+			$.each(data, function(key, data){
+				var sched = [];
+				
+				var courseId = data._id.$oid
+				//alert(data.teacherId);
+
+				//if(courseId != isCourseEnrolled(courseId)) {
+
+					for(var i =0; i<data.courseSchedule.length; i++){
+						if(data.courseSchedule[i] == "Monday"){
+							sched.push("M");
+						}else if(data.courseSchedule[i] == "Tuesday"){
+							sched.push("T");
+						}else if(data.courseSchedule[i] == "Wednesday"){
+							sched.push("W");
+						}else if(data.courseSchedule[i] == "Thursday"){
+							sched.push("Th");
+						}else if(data.courseSchedule[i] == "Friday"){
+							sched.push("F");
+						}else if(data.courseSchedule[i] == "Saturday"){
+							sched.push("Sat");
+						}else if(data.courseSchedule[i] == "Sunday"){
+							sched.push("Sun");
+						}
+						//console.log(data.teacherId);
+					}
+
+					if(data._id.$oid == courseId){
+						//console.log(data._id.$oid);
+						output += "<tr>";
+						output += "<td class='col col-md-2'><img style='width:90px;height:90px;' src='../images/person_icon.png'></td>";
+						output += "<td class='col-md-7' style='word-wrap:break-word;padding-left:20px;padding-right:20px;'>";
+						output +=	    "<p style='font-size:25px'>" + data.courseTitle + "</p>" +
+										"<p>" + data.teacherName + "</p>" +
+										"<p class='announcement_message'><b>Day Schedule: </b>"+ sched+"</p>" ;
+
+						output += 	"</td>";
+						output += "<td class='col-md-2'> <p><b>Time Schedule: </b></p>"+data.courseStartTime + " - " + data.courseEndTime + "</td>";
+						output += "<td class='col-md-1'>" +
+										"<div class='btn-group' role='group'>" +
+											"<a href='enrollStudentPage.html?studentId="+student_ID+"&courseId="+data._id.$oid+"&teacherId="+data.teacherId+"'>" +
+						    					"<button id='enrollBtn' class='btn btn-danger' type='submit'>Enroll</button>" +
+						    				"</a>"+
+						  				"</div>" +
+						  			"</td>";
+						output += "</tr>";
+					} //end of if(data._id.$oid == courseId)
+				//} // end of if(courseId != getCoursesEnrolled(courseId))
+			}); // end of foreach loop
+			
+				$('#courses').html(output);
+			
+		}else{
+			$('#courses').append("<i>No Data to Show</i>");
+		}
+	});
+}
+
+
+function setStudentPages() {
+				var output = ' ';
+				var enrollPage = ' ';
+				
+					output += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					output += "<li><a href='dashboardStudent.html?studentId="+student_ID+"' class='active'>" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					output += "<li><a href='coursesStudent.html?studentId="+student_ID+"'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					output += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					output += "<br><br><br>";
+					output += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+
+					enrollPage += "<a href='enrollPage.html?studentId="+student_ID+"' class='btn btn-default' role='button'>Enroll Here</a>"
+
+			$('#student_NavBar').html(output);
+	}
+
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}	
+</script>

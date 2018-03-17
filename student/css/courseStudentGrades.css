@@ -1,8 +1,5 @@
-#tabl{
-
-	margin-left:50px;
-	width:90%;
-
+#grades_table{
+	width:85%;
 }
 
 .td1{
@@ -15,4 +12,14 @@
 	margin-left: -120px;
 }
 
+.student_sideMenu {
+	text-align: left;
+	margin-left: -19px;
+}
 
+h3.course_header {
+	margin-top: 10px;
+	font-family: optimusFont;
+	font-size: 30px;
+	font-weight: bolder;
+}

@@ -1,0 +1,134 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/accountStudentCSS.css">
+	<link rel='stylesheet' href="css/coursesStudentCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>All Courses</title>
+</head>
+<body onload="setStudentPages(); displayAllCoursesEnrolled(); ">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3 class='course_header'><a href=""><span class="glyphicon glyphicon-th-list"></span></a> All Courses</h3>
+				</div>
+				<br>
+				<div class='col col-md-11'> 
+					<hr class="hr_line_header">
+				</div>
+			</div>
+
+			<div class='row'>
+				<div class='col col-md-3 col-md-offset-9 pull-right' id='traverseToEnrollPage'></div>
+			</div>
+
+			<br><br>
+			<div class='row' id='coursesTable'>
+				<div class='col col-md-11' style='margin-left:25px;'>
+					<table class="table">
+					  <thead class="thead-light">
+					    <tr>
+					      <th class='col col-md-1'></th>
+					      <th class='col col-md-5'>Course Title</th>
+					      <th class='col col-md-3'>Teacher Name</th>
+					      <th class='col col-md-3'>Enrolled As</th>
+					    </tr>
+					  </thead>
+					  <tbody id="coursesBody"></tbody>
+					</table>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+
+</html>
+<script>
+var student_ID = getUrlVars()["studentId"];
+var courseID;
+console.log(student_ID);
+
+	function setStudentPages() {
+				var output = ' ';
+				var toEnrollPage = ' ';
+				
+					output += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					output += "<li><a href='dashboardStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					output += "<li><a href='coursesStudent.html?studentId="+student_ID+"' class='active'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					output += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					output += "<br><br><br>";
+					output += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+
+					toEnrollPage += "<a href='enrollPage.html?studentId="+student_ID+"'>" +
+										"<button class='btn btn-primary-outline' type='button'>" +
+											"<span class='glyphicon glyphicon-plus'></span> Enroll to More Courses" +
+										"</button>" +
+									"</a>";
+
+			$('#student_NavBar').html(output);
+			$('#traverseToEnrollPage').html(toEnrollPage);
+
+	}
+
+	function displayAllCoursesEnrolled() {
+		var courseList = ' ';
+		$.ajax({
+			url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/coursesEnrolled?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju',
+		}).done(function(data){
+			$.each(data, function(key, data){
+				if(student_ID == data.StudentId){
+					console.log("Here");
+					// getting course info
+					
+					$.ajax({
+						url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju',
+					}).done(function(singleData){
+						$.each(singleData, function(index, singleData){
+							if(singleData._id.$oid == data.CourseId){
+								console.log(data.CourseId);
+								console.log(singleData.teacherName+", "+ singleData.courseTitle);
+
+								courseList += "<tr>";
+								courseList += "<td><a href='courseSingleStudent.html?student_ID="+student_ID+"&courseId="+data.CourseId+"'><span class='glyphicon glyphicon-modal-window'></span></a></td>";
+								courseList += "<td>"+singleData.courseTitle+"</td>";
+								courseList += "<td>"+singleData.teacherName+"</td>";
+								courseList += "<td>Student</td>";
+								courseList += "</tr>";
+								
+							}//end of if singleData == CourseId
+						});//end of $.each singleData
+						$('#coursesBody').html(courseList);
+					});// end of .done singleData				
+				}//end of if student_ID
+			});//end of $.each data
+		});// end of .done data
+	}//end of function displayAllCoursesEnrolled
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+</script>

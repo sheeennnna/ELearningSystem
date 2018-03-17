@@ -1,0 +1,127 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/assignmentStudentCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Assignment</title>
+</head>
+<body onload="loadSingleAssignment()">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked">
+				<li><a href="accountStudent.html">
+					<span class='glyphicon glyphicon-user'></span>
+					</br>Account
+				</a></li>
+				<li><a href="dashboardStudent.html">
+					<span class='glyphicon glyphicon-th'></span>
+					</br>Dashboard
+				</a></li>
+				<li><a href="coursesStudent.html" class='active'>
+					<span class='glyphicon glyphicon-book'></span>
+					<br>Courses</br>
+				</a></li>
+				<li><a href="inboxStudent.html">
+					<span class='glyphicon glyphicon-inbox'></span>
+					<br>Inbox</br>
+				</a></li>
+				<br><br><br>
+				<li><a href="../index.html">
+					<span class='glyphicon glyphicon-log-out'></span>
+				</a></li>
+			</ul>
+			<br><br>
+		</div>
+
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10'> 
+					<h3 class='course_header'><a href=""><span class="glyphicon glyphicon-menu-hamburger hide_menu"></span></a> Assignment </h3>
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line_header"></center>
+				</div>
+			</div>
+
+			<div class='col col-md-2 text-center '>
+				<ul class='nav nav-pills nav-stacked student_sideMenu'>
+						<li role='presentation'>
+							<a href="coursesStudent.html"> Home </a>
+						</li>
+						<li role='presentation'>
+							<a href="announcementStudent.html"> Announcements </a>
+						</li>
+						<li role='presentation' class='active'>
+							<a href="assignmentStudent.html"> Assignment </a>
+						</li>
+						<li role='presentation'>
+							<a href="courseStudentGrades.html"> Grades </a>
+						</li>
+						<li role='presentation'>
+							<a href="coursesStudent.html"> Syllabus </a>
+						</li>
+						<li role='presentation'>
+							<a href="courseStudentSession.html"> Session </a>
+						</li>
+					</ul>
+				<br><br>
+			</div>
+			
+			<div class='col col-md-10 assignment_student' style='padding-left:50px'> 
+				<div class="col-md-9" id="announcement_body">
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+</html>
+<script>
+	var assignID = getUrlVars()["assignment_id"];
+	console.log(assignID);
+
+	function loadSingleAssignment() {
+		console.log("processing loadSingleAssignment");
+		$.ajax ({
+			url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/assignmentTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+		}).done(function(data){
+			console.log("loading data");
+			var assignmentBody = ' ';
+			$.each(data, function(key, data){
+				if(data._id.$oid == assignID){
+					assignmentBody += "<h2 class='assignment_title'>" + data.assignmentTitle + "</h2>";
+					assignmentBody += "<hr>";
+					assignmentBody += "<b class='specs'>Due</b> " + data.assignmentDate + 
+									  "  <b class='specs'>Time</b> " + data.assignmentTime + 
+									  "  <b class='specs'>Points</b> " + data.assignmentPoints + 
+									  "  <b class='specs'>Submitting</b> " + data.assignmentSubmissionType;
+					assignmentBody += "<hr>";
+					assignmentBody += "<b class='assignment_sub'>" + data.assignmentTitle + "</b><br><br>";
+					assignmentBody += "<div class='col-md-9' id=announcement_body>";
+					assignmentBody += "<p>" + data.assignmentContent + "</p>";
+
+				}
+			});
+
+			$('#announcement_body').html(assignmentBody);
+			
+
+		});
+	}
+
+	function getUrlVars() {
+		console.log("getting ID");
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}	
+</script>

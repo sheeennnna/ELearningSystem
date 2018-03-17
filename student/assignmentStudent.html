@@ -1,0 +1,206 @@
+<html>
+<head>
+	<link rel="icon" href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/assignmentStudentCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Assignments</title>
+</head>
+<body onload='loadSubjectName(); getAssignments(); setStudentPages(); setStudentSideNavBar()'>
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-10' id="subjectName"> 
+				</div>
+				<div class='col col-md-11'> 
+					<center><hr class="hr_line_header"></center>
+				</div>
+			</div>
+
+			<div class='col col-md-2 text-center '>
+				<ul class='nav nav-pills nav-stacked student_sideMenu' id="student_sideNavBar">
+				</ul>
+				<br><br>
+			</div>
+			<div class='col col-md-10' style='padding-left:50px'> 
+				<div class="panel panel-danger">
+				  <!-- Default panel contents -->
+				  <div class="panel-heading assignment_heading">
+				  	<span class='glyphicon glyphicon-file'></span> Assignments
+				  </div>
+				  <div class="panel-body">
+				  	<br>
+				  	<div id="assignmentUndated">
+					    <ul class="list-group" style='height:23%; overflow-y: scroll;' id='undated'>
+					  	</ul>
+					 </div>
+					 <div id="assignmentDated">
+					  	<ul class="list-group" style='height:23%; overflow-y: scroll;' id='dated'>
+					  	</ul>
+					 </div>
+				  	</div>
+				  </div>
+				</div>
+			</div>
+
+	</div>
+</body>
+
+</html>
+<script>
+
+var student_ID = getUrlVars()["studentId"];
+var course_ID = getUrlVars()["courseId"];
+
+	function loadSubjectName() {
+		var subject_name=' ';
+		$.ajax({
+			url: 'https://api.mlab.com/api/1/databases/elearningsystem/collections/courseTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju'
+		}).done(function(data){
+			$.each(data, function(key, data){
+				if(course_ID == data._id.$oid){
+					subject_name = "<h3 class='course_header'><span class='glyphicon glyphicon-menu-hamburger'></span>"+data.courseTitle+" > Assignments</h3>";
+				}
+			});
+		
+			$('#subjectName').html(subject_name);
+		});
+	}
+
+	function getAssignments(){
+		//ajax
+		$.ajax({
+			url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/assignmentTeacher?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+		}).done(function(data){
+			console.log(data.courseId, course_ID);
+			//if(data.courseId == course_ID){
+				$('#assignmentUndated ul').append("<li class='list-group-item'><b><span class='glyphicon glyphicon-play'></span> Undated Assignments</b></li>");
+				$('#assignmentDated ul').append("<li class='list-group-item'><b><span class='glyphicon glyphicon-play'></span> Dated Assignments</b></li>");
+				var numDated = 0;
+				var numUndated = 0;
+				$.each(data, function(key, data){
+					if(data.assignmentDate == "No Due Date" ){
+						numUndated++;
+					}else{
+						numDated++;
+					}
+				});
+
+				if(numUndated > 0){
+					$.each(data, function(key, data){
+						if(data.courseId == course_ID){
+							if(data.assignmentDate == "No Due Date"){
+								$('#assignmentUndated #undated').append(
+									"<li class='list-group-item'>"+
+										"<div class='row'>"+
+											"<div class='col-md-1'>"+
+												"<h4><span class='glyphicon glyphicon-edit pull-right'></span></h4>"+
+											"</div>"+
+											"<div class='col-md-10'>"+
+												"<a href='assignmentStudentSingle.html?assignment_id="+data._id.$oid+"'><h4>"+data.assignmentTitle+"</h4></a>"+
+												"<b>Due</b> "+data.assignmentDate+" at "+data.assignmentTime+" | -/"+data.assignmentPoints+" pts | Not Yet Graded"+
+											"</div>"+
+											"<div class='col-md-1'>"+
+											"</div>"+
+						    			"</div>"+
+						    		"</li>"	
+								);
+							}
+						}
+					});
+				}else{
+					$('#assignmentUndated ul').append("<li class='list-group-item'>No Data to Show</li>");
+				}
+
+				if(numDated > 0){
+					$.each(data, function(key, data){
+						if(data.courseId == course_ID){
+							if(data.assignmentDate != "No Due Date"){
+								$('#assignmentDated #dated').append(
+									"<li class='list-group-item'>"+
+										"<div class='row'>"+
+											"<div class='col-md-1'>"+
+												"<h4><span class='glyphicon glyphicon-edit pull-right'></span></h4>"+
+											"</div>"+
+											"<div class='col-md-10'>"+
+												"<a href='assignmentStudentSingle.html?assignment_id='><h4>"+data.assignmentTitle+"</h4></a>"+
+												"<b>Due</b> "+data.assignmentDate+" at "+data.assignmentTime+" | -/"+data.assignmentPoints+" pts | Not Yet Graded"+
+											"</div>"+
+											"<div class='col-md-1'>"+
+											"</div>"+
+						    			"</div>"+
+						    		"</li>"							
+								);
+							}
+						}
+					});
+				}else{
+					$('#assignmentDated ul').append("<li class='list-group-item'>No Data to Show</li>");
+				}
+				console.log(data);
+			//}
+			
+		});
+	}
+
+	function setStudentPages() {
+				var sNavBar = ' ';
+				
+					sNavBar += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					sNavBar += "<li><a href='dashboardStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					sNavBar += "<li><a href='coursesStudent.html?studentId="+student_ID+"' class='active'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					sNavBar += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					sNavBar += "<br><br><br>";
+					sNavBar += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+			$('#student_NavBar').html(sNavBar);
+
+	}
+
+	function setStudentSideNavBar() {
+		var sideNav = ' ';
+			sideNav +=  "<li role='presentation'>" +
+							"<a href='courseSingleStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Home </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='announcementStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Announcements </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation' class='active'>" +
+							"<a href='assignmentStudent.html?studentId="+student_ID+"&courseId="+course_ID+"'> Assignment </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='courseStudentGrades.html?studentId="+student_ID+"&courseId="+course_ID+"'> Grades </a>" +
+						"</li>";
+			sideNav +=	"<li role='presentation'>" +
+							"<a href='courseStudentSession.html?studentId="+student_ID+"&courseId="+course_ID+"'> Session </a>" +
+						"</li>";
+		$('#student_sideNavBar').html(sideNav);
+	}
+
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}
+
+
+</script>

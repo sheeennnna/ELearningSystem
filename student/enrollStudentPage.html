@@ -1,0 +1,47 @@
+<script src="../bootstrap/js/jquery.min.js"></script>
+<script src="../bootstrap/js/bootstrap.min.js"></script>
+<script>
+var student_ID = getUrlVars()["studentId"];
+var course_ID = getUrlVars()["courseId"];
+var teacher_ID = getUrlVars()["teacherId"];
+
+$(document).ready(function(){
+	$.ajax({
+		url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/coursesEnrolled?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+	}).done(function(data){
+		$.each(data, function(key, data){
+				if(course_ID != data.CourseId){
+					$.ajax({
+						url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/coursesEnrolled?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+						data: JSON.stringify( {
+							"CourseId": course_ID,
+							"StudentId": student_ID,
+							"TeacherId":teacher_ID
+							//add teacher's ID 
+						}),
+						type: "POST",
+						contentType: "application/json",
+						success: function(data){
+							window.location.href = "dashboardStudent.html?studentId="+student_ID;
+						},
+						error:function(xhr, status, err){
+							console.log(err);
+						}
+					});
+				}else{
+					window.location.href = "enrollPage.html?studentId="+student_ID;
+					alert("You have enrolled to this course!");
+				}
+		});
+	});
+
+});
+
+function getUrlVars() {
+	var vars = {};
+	var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+		vars[key] = value;
+	});
+	return vars;
+}
+</script>

@@ -8,9 +8,18 @@
 	padding-top: 22px;
 }
 
-.body_section p.break_line {
-	margin-top: -20px;
+.hr_line{
+    width: 95%;
+    display: block;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    margin-left: auto;
+    margin-right: auto;
+    border-style: inset;
+    border-width: 1px;
 }
+
+
 
 .body_section .view_sched{
 	margin-top: 10px;

@@ -1,0 +1,257 @@
+<html>
+<head>
+	<link rel='icon' href="images/icon.png">
+	<link rel='stylesheet' href="css/mainCSS.css">
+	<link rel='stylesheet' href="css/dashboardStudentCSS.css">
+	<link rel='stylesheet' href="css/accountStudentCSS.css">
+	<link rel='stylesheet' href='../bootstrap/css/bootstrap.min.css'>
+	<link rel='stylesheet' href='../datatable_files/datatables.min.css'>
+	<script src="../bootstrap/js/jquery.min.js"></script>
+	<script src="../bootstrap/js/bootstrap.min.js"></script>
+
+	<title>Account</title>
+</head>
+<body onload="setStudentPages();loadStudentProfile();">
+	<div class='row'>
+		<div class='col col-md-1 text-center main_menu'>
+			<br><img src="images/icon.png" alt="WebProf" width='auto' height='70'>
+			<br><br><br>
+			<ul class="nav nav-pills nav-stacked" id="student_NavBar">
+			</ul>
+			<br><br>
+		</div>
+
+		<div class='col col-md-11 body_section'>
+			<div class='row'>
+				<div class='col col-md-12'> 
+					<div class='row'>
+						<div class='col col-md-4'>
+							<h3>Account</h3>
+						</div>
+						<div class='col col-md-4'></div>
+						<div class='col col-md-4 username' id="profile_name"></div>
+					</div>
+					<div class='row'>
+						<p class='account_break_line'>
+						______________________________________________________________________________________________________________________________________________________________
+						</p>
+					</div>
+					 
+				</div>
+			</div>
+			<div class='row' id="student_body">
+				
+			</div>	
+			<div class='row'>
+				<div class='col col-md-3 col-md-offset-8 pull-right'>
+					<button type='button' class='btn btn-default edit_button' id='editAccount'>
+						<span class='glyphicon glyphicon-edit'></span> Edit Account
+					</button>
+				</div>;
+			</div>
+		</div>
+	</div>
+	<!-- MODAL -->
+	<div id='edit_modal' class='modal'>
+		<div class='modal-content'>
+			<span class='close'>&times;</span>
+			<h3 class='editAcc_header'>Edit Account</h3>
+			<p class='editAcc_breakline'>___________________________________________________________________________________</p>
+
+			<div class='row'>
+				<div class='col col-md-6 col-md-offset-3'>
+					<form id="updateAccountInformation">
+					<div class="input-group">
+					  <span class="input-group-addon" id="basic-addon1">@</span>
+					  <input type="text" class="form-control" placeholder="Email Address" aria-describedby="basic-addon1" id="email_ad">
+					</div> </br>
+					<div class="input-group">
+					  <span class="input-group-addon" id="basic-addon1">#</span>
+					  <input type="text" class="form-control" placeholder="Mobile Number" aria-describedby="basic-addon1" id="cellphone_number" autocomplete="off">
+					</div> </br>
+					<div class="input-group">
+					  <span class="input-group-addon glyphicon glyphicon-lock" id="basic-addon1"></span>
+					  <input type="text" class="form-control" placeholder="Change password?" aria-describedby="basic-addon1" id="password" autocomplete="off">
+					</div> </br>
+				</div>
+			</div>
+			<br><br>
+			<div class='row'>
+				<div class='col col-md-4'></div>
+				<div class='col col-md-4 text-center'>
+					<button type='submit' id='submit' class='btn btn-success'>
+						Save Changes
+					</button>
+				</div>
+				<div class='col col-md-4'></div>
+			</div>
+			</form>
+		</div>
+	</div>
+
+</body>
+
+</html>
+
+<script>
+// Get the modal
+var modal = document.getElementById('edit_modal');
+
+// Get the button that opens the modal
+var btn = document.getElementById("editAccount");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks the button, open the modal 
+btn.onclick = function() {
+    modal.style.display = "block";
+}
+
+// When the user clicks on <span> (x), close the modal
+span.onclick = function() {
+    modal.style.display = "none";
+}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+
+</script>
+<script>
+	var student_ID = getUrlVars()["studentId"];
+	console.log(student_ID);
+
+	function setStudentPages() {
+				var output = ' ';
+				
+					output += "<li><a href='accountStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-user'></span></br>Account</a></li>";
+					output += "<li><a href='dashboardStudent.html?studentId="+student_ID+"' class='active'>" +
+							  "<span class='glyphicon glyphicon-th'></span></br>Dashboard</a></li>";
+					output += "<li><a href='coursesStudent.html?studentId="+student_ID+"'>"+
+							  "<span class='glyphicon glyphicon-book'></span><br>Courses</br></a></li>";
+					output += "<li><a href='inboxStudent.html?studentId="+student_ID+"'>" +
+							  "<span class='glyphicon glyphicon-inbox'></span><br>Inbox</br></a></li>";
+					output += "<br><br><br>";
+					output += "<li><a href='../index.html'><span class='glyphicon glyphicon-log-out'></span></a></li>";
+			$('#student_NavBar').html(output);
+
+	}
+
+	
+	function loadStudentProfile() {
+		$.ajax ({
+			url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/student?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+		}).done(function(data){
+			//alert(announcementID);
+			var studentName = ' ';
+			var studentProfile = ' ';
+			$.each(data, function(key, data){
+
+				if(data._id.$oid == student_ID){
+
+					studentName += "<p>" + data.FirstName + "'s Profile</p>";
+
+					studentProfile += "<div class='col col-md-3'><img src='../images/person_icon.png' class='profile_picture'></div>";
+					studentProfile += "<div class='col col-md-6'>";
+					studentProfile += "<p class='info_name'>" + data.LastName + ", " + data.FirstName + "</p>";
+					studentProfile += "<div class='panel panel-default info_panel'>"+
+					  						"<div class='panel-heading'>" +
+					  							"<p class='title_name'>Contact Details</p>" +
+											"</div>";
+					studentProfile += 		"<div class='panel-body user_details'>" + 
+						    					"<p class='info_title'> E-mail Address: " +
+													"<span class='info_email'>" + data.Email + "</span>" + 
+												"</p><br>" +
+												"<p class='info_title'> Mobile Number: " + 
+													"<span class='info_mobile'>" + data.ContactNumber + "</span>" +
+												"</p><br>" + 
+					  						"</div>";
+					studentProfile += "</div>";
+					studentProfile += "<div class='panel panel-default info_panel'>";
+					studentProfile += 	"<div class='panel-heading'>" +
+					  							"<p class='title_name'>Biography Details</p>" +
+					  					"</div>";
+					studentProfile +=  	"<div class='panel-body user_details'>" +
+											"<p class='info_title'>Birthday: " +
+												"<span>" + data.Birthday + "</span>" +
+											"</p><br>" +
+											"<p class='info_title'>Address: " +
+												"<span>" + data.Address + "</span>" +
+											"</p><br>" +
+					  					"</div>";
+					studentProfile += "</div>";
+					studentProfile += "</div>";	
+				}
+			});
+
+			$('#profile_name').html(studentName);
+			$('#student_body').html(studentProfile);
+			
+
+		});
+	}
+
+	$(document).ready(function() {
+		$('#updateAccountInformation').on('submit', function(e){
+			e.preventDefault();
+			var edited_email = $('#email_ad').val();
+			var edited_phoneNum = $('#cellphone_number').val();
+			var new_pass = $("#password").val();
+
+			$.ajax({
+				url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/student?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+			}).done(function(data){
+				$.each(data, function(key,data){
+					console.log(data._id.$oid);
+					if(student_ID == data._id.$oid){
+						if(edited_email == null || edited_email == ""){
+							edited_email = data.Email;
+						}
+						if(edited_phoneNum ==  null || edited_phoneNum == ""){
+							edited_phoneNum = data.ContactNumber;
+						}
+						if(new_pass == null || new_pass == ""){
+							new_pass = data.password;
+						}
+
+
+						$.ajax({
+							url: "https://api.mlab.com/api/1/databases/elearningsystem/collections/student/"+student_ID+"?apiKey=Kpd8rAcbEKZVrMFyVVrn-Nkn7MK2shju",
+							data: JSON.stringify ({
+								"$set" : { 
+									"Email" : edited_email,
+									"ContactNumber" : edited_phoneNum,
+									"Password" : new_pass
+								}
+							}),
+							type: "PUT",
+							contentType: "application/json",
+							success: function(data){
+								alert('Successfully updated student information.');
+								window.location.href = "accountStudent.html?studentId="+student_ID;
+							},
+							error:function(xhr, status, err){
+								console.log(err);
+							}
+						});
+					}
+				});
+			});
+
+		});
+	});
+
+
+	function getUrlVars() {
+		var vars = {};
+		var parts = window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, function(m,key,value) {
+			vars[key] = value;
+		});
+		return vars;
+	}	
+</script>
